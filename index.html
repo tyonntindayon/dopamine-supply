@@ -4,704 +4,188 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DOPAMINE SUPPLY | PLAY MORE!</title>
-<meta name="description" content="DOPAMINE SUPPLY - たくさん遊んで、楽しさを補給しよう。">
+<title>DOPABALL | DOPAMINE SUPPLY</title>
+
+<script>
+  document.title = "DOPABALL | DOPAMINE SUPPLY";
+</script>
+
+<script src="https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js"></script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
-
-:root {
-  --blue:#2364ff;
-  --cyan:#35d9f5;
-  --pink:#ff3c9e;
-  --yellow:#ffe735;
-  --orange:#ff8138;
-  --purple:#8d55ff;
-  --dark:#15152c;
-  --white:#fff;
-  --bg:#f7f8ff;
-}
-
-* {box-sizing:border-box}
-
-html {scroll-behavior:smooth}
+* { box-sizing: border-box; }
 
 body {
-  margin:0;
-  background:var(--bg);
-  color:var(--dark);
-  font-family:'Fredoka','Noto Sans JP',sans-serif;
+  margin: 0;
+  padding: 25px 16px 50px;
+  background: #f4f6ff;
+  color: #17172c;
+  font-family: Arial, sans-serif;
 }
 
-a {text-decoration:none;color:inherit}
-button,input {font:inherit}
-
-.top-stripe {
-  height:9px;
-  background:linear-gradient(
-    90deg,
-    var(--pink) 0 16.6%,
-    var(--orange) 16.6% 33.2%,
-    var(--yellow) 33.2% 49.8%,
-    var(--cyan) 49.8% 66.4%,
-    var(--blue) 66.4% 83%,
-    var(--purple) 83%
-  );
+.back {
+  display: inline-block;
+  margin-bottom: 22px;
+  color: #3155e7;
+  font-weight: bold;
+  text-decoration: none;
 }
 
-/* HEADER */
-
-header {
-  height:78px;
-  padding:0 5%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:white;
-  position:sticky;
-  top:0;
-  z-index:20;
-  box-shadow:0 3px 15px rgba(30,40,100,.07);
+.container {
+  max-width: 1000px;
+  margin: auto;
 }
 
-.logo {
-  display:flex;
-  align-items:center;
-  gap:11px;
-  font-size:22px;
-  font-weight:700;
-  letter-spacing:-1px;
-  line-height:1;
+.heading {
+  text-align: center;
+  margin-bottom: 22px;
 }
 
-.logo-icon {
-  width:43px;
-  height:43px;
-  border-radius:14px;
-  display:grid;
-  place-items:center;
-  color:white;
-  font-size:25px;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  transform:rotate(-7deg);
-  box-shadow:0 4px 0 #173bb0;
+.heading h1 {
+  margin: 0;
+  font-size: clamp(36px, 7vw, 65px);
+  color: #3155e7;
+  font-weight: 900;
+  letter-spacing: -2px;
 }
 
-.logo-text span {color:var(--blue)}
-
-nav {
-  display:flex;
-  align-items:center;
-  gap:30px;
-  font-size:14px;
-  font-weight:700;
+.heading p {
+  color: #777b99;
+  font-size: 14px;
 }
 
-nav a:hover {color:var(--pink)}
-
-.header-right {
-  display:flex;
-  align-items:center;
-  gap:12px;
+.game-frame {
+  padding: 15px;
+  background: white;
+  border: 4px solid #3155e7;
+  border-radius: 20px;
+  box-shadow: 0 8px 0 #b9c7ff;
 }
 
-.search-box {
-  width:205px;
-  padding:11px 16px;
-  border:2px solid #e9eaff;
-  border-radius:30px;
-  background:#f8f8ff;
-  outline:none;
-  font-size:12px;
+.game-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-weight: 900;
 }
 
-.search-box:focus {border-color:var(--blue)}
-
-.header-play {
-  padding:11px 19px;
-  border-radius:30px;
-  color:white;
-  background:var(--blue);
-  font-size:12px;
-  font-weight:700;
-  box-shadow:0 4px 0 #1741b9;
+.game-title span:last-child {
+  color: #ff3c9e;
+  font-size: 12px;
 }
 
-.header-play:hover {transform:translateY(-2px)}
-
-.menu-button {
-  display:none;
-  border:0;
-  background:none;
-  font-size:25px;
+.game-area {
+  width: 100%;
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #15152c;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-/* HERO */
-
-.hero-wrap {
-  padding:25px 4% 30px;
-  background:
-    radial-gradient(circle at 10% 20%,#ffb9dc 0 4px,transparent 5px),
-    radial-gradient(circle at 90% 70%,#ffe735 0 5px,transparent 6px),
-    linear-gradient(130deg,#42dfff,#3672ff 55%,#9b5cff);
-  overflow:hidden;
+pyxel-run {
+  display: block;
+  max-width: 100%;
 }
 
-.hero {
-  max-width:1450px;
-  margin:auto;
-  position:relative;
-  border:6px solid white;
-  border-radius:25px;
-  overflow:hidden;
-  background:#172b69;
-  box-shadow:0 12px 0 rgba(16,34,100,.2);
+pyxel-run canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  image-rendering: pixelated;
 }
 
-.hero-image {
-  display:block;
-  width:100%;
-  aspect-ratio:16/8.1;
-  object-fit:cover;
-  object-position:center;
+.instructions {
+  margin-top: 25px;
+  padding: 22px;
+  background: white;
+  border-radius: 16px;
 }
 
-.hero-label {
-  position:absolute;
-  left:25px;
-  top:25px;
-  background:var(--yellow);
-  color:#17172d;
-  padding:10px 17px;
-  border:3px solid #17172d;
-  border-radius:30px;
-  font-size:13px;
-  font-weight:700;
-  transform:rotate(-4deg);
-  box-shadow:3px 4px 0 #17172d;
+.instructions h2 {
+  margin-top: 0;
+  color: #3155e7;
+  font-size: 20px;
 }
 
-.hero-bottom {
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  padding:65px 30px 25px;
-  display:flex;
-  align-items:end;
-  justify-content:space-between;
-  gap:20px;
-  background:linear-gradient(transparent,rgba(8,20,75,.86));
-  color:white;
+.instructions p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #555;
 }
 
-.hero-bottom h1 {
-  margin:0;
-  font-size:clamp(35px,6vw,75px);
-  line-height:.95;
-  letter-spacing:-3px;
-  color:var(--yellow);
-  text-shadow:4px 5px 0 #18265f;
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.hero-bottom p {
-  margin:10px 0 0;
-  font-size:clamp(12px,1.5vw,17px);
-  font-weight:700;
-  text-shadow:1px 2px 4px #111;
+.control {
+  background: #edf0ff;
+  border-radius: 10px;
+  padding: 10px 15px;
+  font-size: 13px;
+  font-weight: bold;
 }
-
-.hero-button {
-  flex-shrink:0;
-  display:inline-flex;
-  align-items:center;
-  gap:12px;
-  background:var(--yellow);
-  color:#15205c;
-  border:3px solid #15205c;
-  border-radius:50px;
-  padding:15px 24px;
-  font-weight:700;
-  font-size:15px;
-  box-shadow:0 5px 0 #15205c;
-  transition:.15s;
-}
-
-.hero-button:hover {
-  transform:translateY(-4px);
-  box-shadow:0 9px 0 #15205c;
-}
-
-/* TICKER */
-
-.ticker {
-  background:var(--dark);
-  color:white;
-  overflow:hidden;
-  white-space:nowrap;
-  padding:13px 0;
-  font-size:13px;
-  font-weight:700;
-  letter-spacing:2px;
-}
-
-.ticker span {padding:0 25px}
-.ticker b {color:var(--yellow)}
-
-/* CONTENT */
-
-main {
-  max-width:1400px;
-  margin:auto;
-  padding:0 5%;
-}
-
-.section-title {
-  display:flex;
-  align-items:end;
-  justify-content:space-between;
-  gap:15px;
-  margin:45px 0 20px;
-}
-
-.section-title h2 {
-  margin:0;
-  font-size:29px;
-  font-weight:700;
-  letter-spacing:-1px;
-}
-
-.section-title p {
-  margin:5px 0 0;
-  color:#777b99;
-  font-size:12px;
-}
-
-.all-games {
-  color:var(--blue);
-  font-size:13px;
-  font-weight:700;
-}
-
-/* CATEGORY */
-
-.categories {
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-bottom:22px;
-}
-
-.category {
-  cursor:pointer;
-  border:2px solid #e6e8ff;
-  background:white;
-  border-radius:30px;
-  padding:10px 19px;
-  font-size:12px;
-  font-weight:700;
-  transition:.15s;
-}
-
-.category:hover {
-  transform:translateY(-2px);
-  border-color:var(--blue);
-}
-
-.category.active {
-  color:white;
-  background:var(--blue);
-  border-color:var(--blue);
-  box-shadow:0 4px 0 #173db4;
-}
-
-/* GAME CARDS */
-
-.games {
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:23px 18px;
-  padding-bottom:55px;
-}
-
-.game-card {
-  display:block;
-  min-width:0;
-  cursor:pointer;
-}
-
-.game-thumb {
-  position:relative;
-  overflow:hidden;
-  aspect-ratio:1.55;
-  border-radius:17px;
-  border:4px solid white;
-  box-shadow:0 5px 13px rgba(30,40,100,.12);
-  transition:.2s;
-}
-
-.game-card:hover .game-thumb {
-  transform:translateY(-6px) rotate(-1deg);
-  box-shadow:0 12px 20px rgba(30,40,100,.18);
-}
-
-.game-thumb img {
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:cover;
-}
-
-.game-thumb .placeholder {
-  width:100%;
-  height:100%;
-  display:grid;
-  place-items:center;
-  font-size:65px;
-  background:linear-gradient(135deg,#ff9bd0,#ffe735);
-}
-
-.game-badge {
-  position:absolute;
-  top:10px;
-  left:10px;
-  z-index:2;
-  padding:6px 10px;
-  border-radius:20px;
-  background:var(--pink);
-  color:white;
-  font-size:10px;
-  font-weight:700;
-  box-shadow:0 2px 5px #0003;
-}
-
-.game-info {
-  padding:12px 5px 0;
-}
-
-.game-info h3 {
-  margin:0;
-  font-size:18px;
-  font-weight:700;
-}
-
-.game-info p {
-  margin:5px 0 0;
-  color:#777b99;
-  font-size:12px;
-}
-
-.game-card.coming {cursor:default}
-.game-card.coming:hover .game-thumb {transform:none}
-.game-card.coming .game-badge {background:var(--purple)}
-
-.empty {
-  grid-column:1/-1;
-  text-align:center;
-  padding:50px 10px;
-  color:#8588a2;
-}
-
-/* ABOUT */
-
-.about {
-  position:relative;
-  overflow:hidden;
-  background:linear-gradient(110deg,#ff70b9,#9b70ff);
-  color:white;
-  padding:35px;
-  border-radius:23px;
-  margin:5px 0 55px;
-  box-shadow:0 7px 0 #6545bf;
-}
-
-.about h2 {
-  margin:0 0 10px;
-  font-size:27px;
-}
-
-.about p {
-  margin:0;
-  font-size:13px;
-  line-height:1.9;
-}
-
-.about-symbol {
-  position:absolute;
-  right:35px;
-  top:5px;
-  font-size:100px;
-  transform:rotate(15deg);
-  opacity:.35;
-}
-
-/* FOOTER */
 
 footer {
-  background:var(--dark);
-  color:white;
-  padding:32px 5%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  font-size:11px;
-}
-
-footer strong {
-  font-size:17px;
-  color:var(--yellow);
-  letter-spacing:1px;
-}
-
-/* MOBILE */
-
-@media(max-width:900px) {
-  nav {gap:15px}
-  .search-box {width:155px}
-  .games {grid-template-columns:repeat(3,minmax(0,1fr))}
-}
-
-@media(max-width:650px) {
-  header {height:66px;padding:0 4%}
-  .logo {font-size:17px}
-  .logo-icon {width:36px;height:36px;font-size:21px}
-  nav {display:none}
-  .search-box {width:125px;padding:9px 12px}
-  .header-play {display:none}
-  .menu-button {display:block}
-  .hero-wrap {padding:15px 3% 23px}
-  .hero {border-width:4px;border-radius:17px}
-  .hero-image {aspect-ratio:1.1;object-position:center}
-  .hero-label {left:12px;top:12px;font-size:10px;padding:7px 11px}
-  .hero-bottom {padding:50px 14px 17px;display:block}
-  .hero-bottom h1 {font-size:clamp(32px,10vw,55px)}
-  .hero-bottom p {font-size:11px}
-  .hero-button {margin-top:13px;padding:11px 17px;font-size:12px}
-  main {padding:0 4%}
-  .section-title {margin-top:32px}
-  .section-title h2 {font-size:23px}
-  .games {grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 12px}
-  .game-info h3 {font-size:15px}
-  .game-thumb {border-radius:13px;border-width:3px}
-  .game-thumb .placeholder {font-size:48px}
-  .about {padding:25px 20px}
-  .about h2 {font-size:21px}
-  .about-symbol {font-size:70px;right:12px;top:10px}
-  footer {flex-direction:column;align-items:flex-start}
-}
-
-@media(max-width:380px) {
-  .logo {font-size:14px}
-  .search-box {width:105px}
+  text-align: center;
+  margin-top: 35px;
+  color: #9294a7;
+  font-size: 11px;
 }
 </style>
 </head>
 
 <body>
+<div class="container">
 
-<div class="top-stripe"></div>
+<a class="back" href="/">← DOPAMINE SUPPLYへ戻る</a>
 
-<header>
-  <a class="logo" href="#">
-    <span class="logo-icon">D!</span>
-    <span class="logo-text">DOPAMINE <span>SUPPLY</span></span>
-  </a>
-
-  <nav>
-    <a href="#games">GAMES</a>
-    <a href="#about">ABOUT</a>
-  </nav>
-
-  <div class="header-right">
-    <input
-      class="search-box"
-      id="search"
-      type="search"
-      placeholder="ゲームを探す..."
-    >
-    <a class="header-play" href="#games">PLAY NOW!</a>
-    <button class="menu-button" aria-label="メニュー">☰</button>
-  </div>
-</header>
-
-<!-- MAIN FEATURE -->
-
-<section class="hero-wrap">
-  <div class="hero">
-    <img
-      class="hero-image"
-      src="/dopaball-cover.jpeg"
-      alt="DOPABALL gameplay"
-    >
-
-    <div class="hero-label">★ PICK UP GAME</div>
-
-    <div class="hero-bottom">
-      <div>
-        <h1>DOPABALL</h1>
-        <p>ドーパミン全開！ピクセルアートのボールゲーム。</p>
-      </div>
-
-      <a class="hero-button" href="/games/dopaball/">
-        ▶ PLAY DOPABALL <span>→</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<div class="ticker">
-  <span>LET'S PLAY! <b>★</b></span>
-  <span>FIND YOUR FAVORITE GAME <b>✦</b></span>
-  <span>DOPAMINE SUPPLY <b>★</b></span>
-  <span>PLAY MORE! <b>✦</b></span>
-  <span>LET'S PLAY! <b>★</b></span>
+<div class="heading">
+  <h1>DOPABALL</h1>
+  <p>KEEP THE BALL ALIVE. GET YOUR FEVER!</p>
 </div>
 
-<main>
+<div class="game-frame">
+  <div class="game-title">
+    <span>🎮 DOPABALL</span>
+    <span>A Tgames Original</span>
+  </div>
 
-  <!-- GAME LIST -->
+  <div class="game-area">
+    <pyxel-run
+      root="https://cdn.jsdelivr.net/gh/tyonntindayon/squash-fever@main"
+      name="main.py">
+    </pyxel-run>
+  </div>
+</div>
 
-  <section id="games">
-    <div class="section-title">
-      <div>
-        <h2>🎮 ALL GAMES</h2>
-        <p>お気に入りのゲームを見つけよう！</p>
-      </div>
-      <span class="all-games">Tgames ORIGINALS ✦</span>
-    </div>
+<div class="instructions">
+  <h2>HOW TO PLAY</h2>
+  <p>
+    ボールをパドルで跳ね返し、コンボをつなげよう！
+    コンボを重ねるとスコア倍率が上昇。
+    FEVER状態を目指そう！
+  </p>
 
-    <div class="categories">
-      <button class="category active" data-category="all">ALL</button>
-      <button class="category" data-category="action">ACTION</button>
-      <button class="category" data-category="casual">CASUAL</button>
-      <button class="category" data-category="coming">COMING SOON</button>
-    </div>
-
-    <div class="games" id="gameList">
-
-      <!-- DOPABALL -->
-      <a
-        class="game-card"
-        href="/games/dopaball/"
-        data-category="action"
-        data-name="dopaball ドーパボール"
-      >
-        <div class="game-thumb">
-          <span class="game-badge">NEW!</span>
-          <img src="/dopaball-cover.jpeg" alt="DOPABALL">
-        </div>
-        <div class="game-info">
-          <h3>DOPABALL</h3>
-          <p>PIXEL ACTION GAME</p>
-        </div>
-      </a>
-
-      <!-- DOPAUP -->
-      <div
-        class="game-card coming"
-        data-category="coming"
-        data-name="dopaup"
-      >
-        <div class="game-thumb">
-          <span class="game-badge">COMING SOON</span>
-          <div class="placeholder">⬆️</div>
-        </div>
-        <div class="game-info">
-          <h3>DOPAUP ⇧</h3>
-          <p>COMING SOON</p>
-        </div>
-      </div>
-
-      <!-- FUTURE GAME -->
-      <div
-        class="game-card coming"
-        data-category="coming"
-        data-name="new game"
-      >
-        <div class="game-thumb">
-          <span class="game-badge">COMING SOON</span>
-          <div class="placeholder" style="background:linear-gradient(135deg,#ff8b43,#ffe735)">💣</div>
-        </div>
-        <div class="game-info">
-          <h3>NEW GAME</h3>
-          <p>COMING SOON</p>
-        </div>
-      </div>
-
-      <div
-        class="game-card coming"
-        data-category="coming"
-        data-name="new game"
-      >
-        <div class="game-thumb">
-          <span class="game-badge">COMING SOON</span>
-          <div class="placeholder" style="background:linear-gradient(135deg,#41e5d0,#387bff)">🌀</div>
-        </div>
-        <div class="game-info">
-          <h3>NEW GAME</h3>
-          <p>COMING SOON</p>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-
-  <section class="about" id="about">
-    <div class="about-symbol">✦</div>
-    <h2>YOUR DAILY DOSE OF FUN!</h2>
-    <p>
-      DOPAMINE SUPPLYは、ゲームを楽しむための遊び場。<br>
-      Tgamesがつくるオリジナルゲームを、ここから楽しもう！
-    </p>
-  </section>
-
-</main>
+  <div class="controls">
+    <div class="control">← →：パドル移動</div>
+    <div class="control">マウス：パドル操作</div>
+    <div class="control">SPACE：リトライ</div>
+  </div>
+</div>
 
 <footer>
-  <strong>DOPAMINE SUPPLY</strong>
-  <span>© 2026 Tgames. ALL RIGHTS RESERVED.</span>
+  © 2026 Tgames / DOPAMINE SUPPLY
 </footer>
 
-<script>
-const search = document.getElementById('search');
-const cards = [...document.querySelectorAll('.game-card')];
-const filters = [...document.querySelectorAll('.category')];
+</div>
 
-let activeCategory = 'all';
-
-function updateGames() {
-  const word = search.value.toLowerCase().trim();
-
-  cards.forEach(card => {
-    const name = (card.dataset.name || '').toLowerCase();
-    const matchesWord = name.includes(word);
-
-    const matchesCategory =
-      activeCategory === 'all' ||
-      card.dataset.category === activeCategory;
-
-    card.style.display =
-      matchesWord && matchesCategory ? '' : 'none';
-  });
-}
-
-search.addEventListener('input', updateGames);
-
-filters.forEach(button => {
-  button.addEventListener('click', () => {
-    activeCategory = button.dataset.category;
-
-    filters.forEach(item => {
-      item.classList.toggle('active', item === button);
-    });
-
-    updateGames();
-  });
-});
-</script>
 <script>
   document.title = "DOPABALL | DOPAMINE SUPPLY";
 </script>
