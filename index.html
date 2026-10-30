@@ -20,6 +20,81 @@
       --radius: 24px;
       --max: 1120px;
     }
+    /* FULL-PAGE MOVING DOPA STRIPES */
+    body {
+      position: relative;
+      isolation: isolate;
+      background: #20243a;
+      color: #fffefa;
+    }
+    body:before {
+      content: "";
+      position: fixed;
+      inset: -35%;
+      z-index: -1;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        118deg,
+        #f16b50 0 42px,
+        #ffb33f 42px 84px,
+        #f5e64c 84px 126px,
+        #63c9a5 126px 168px,
+        #4658d9 168px 210px,
+        #a45bd6 210px 252px,
+        #ed4f91 252px 294px
+      );
+      background-size: 200% 200%;
+      animation: dopa-full-page-stripes 8s linear infinite;
+      opacity: .96;
+    }
+    @keyframes dopa-full-page-stripes {
+      from { transform: translate3d(-7%, -5%, 0) rotate(0deg); background-position: 0 0; }
+      to { transform: translate3d(7%, 5%, 0) rotate(8deg); background-position: 100% 100%; }
+    }
+    .header {
+      background: rgba(32,36,58,.86);
+      border-bottom: 3px solid #ffcf45;
+    }
+    .brand-name, nav a { color: #fffefa; }
+    nav a:hover { background: rgba(255,255,255,.18); color:#fff; }
+    .hero {
+      background: transparent;
+    }
+    .hero:before, .hero:after { filter: saturate(1.5); }
+    section { background: transparent; }
+    .featured, .game-card {
+      color: #fffefa;
+      background: rgba(32,36,58,.9);
+      border: 3px solid #ffcf45;
+      box-shadow: 0 0 0 5px rgba(241,107,80,.8), 0 12px 32px rgba(0,0,0,.28);
+    }
+    .featured p, .game-card p { color: #e1e1ee; }
+    .feature-points span, .power-card small {
+      color: #20243a;
+      background: #ffcf45;
+    }
+    .power-card {
+      color: #20243a;
+      background: linear-gradient(120deg,#fff17a,#ffb2d4,#9debd6);
+      border: 3px solid #20243a;
+      box-shadow: 5px 5px 0 #ffcf45;
+    }
+    .power-card p { color: #35364a; }
+    .how-intro {
+      color: #20243a;
+      background: linear-gradient(110deg,#ffcf45,#ff8eae,#8ee4d0);
+    }
+    .how-intro p { color: #35364a; }
+    .about {
+      border: 3px solid #ffcf45;
+      box-shadow: 0 0 0 5px rgba(241,107,80,.8);
+    }
+    .dopa-joke {
+      color: #20243a;
+      background: linear-gradient(100deg,#ffcf45,#ff8eae,#8ee4d0,#a7b2ff);
+      border: 3px solid #20243a;
+    }
+    .footer-top { color: #fffefa; }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
@@ -293,7 +368,7 @@
     @media(prefers-reduced-motion:reduce) {
       html { scroll-behavior:auto; }
       .button:hover { transform:none; }
-      .hero, .hero:before, .hero:after, .hero-dopa, .hero-ticker, .hero-ticker div, .hero-art, .arcade, .arcade-label span:first-child, .screen-ball, .hero-sticker, .hero-spark { animation:none !important; }
+      body:before, .hero, .hero:before, .hero:after, .hero-dopa, .hero-ticker, .hero-ticker div, .hero-art, .arcade, .arcade-label span:first-child, .screen-ball, .hero-sticker, .hero-spark { animation:none !important; }
     }
   </style>
 </head>
