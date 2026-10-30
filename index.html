@@ -94,6 +94,29 @@
     .featured p { color:var(--muted); margin:0 0 16px; }
     .feature-points { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 22px; }
     .feature-points span { padding:7px 11px; border-radius:9px; background:#f1eee6; font-size:.82rem; font-weight:800; }
+
+    .how-to-play { position:relative; }
+    .how-intro { display:grid; grid-template-columns:74px 1fr; gap:18px; align-items:start; padding:28px; background:var(--lime); border-radius:24px; transform:rotate(-.5deg); }
+    .how-number { width:64px; height:64px; display:grid; place-items:center; border-radius:18px; background:var(--coral); color:white; font-size:1.7rem; font-weight:1000; transform:rotate(-8deg); }
+    .how-intro h3 { margin:0 0 8px; font-size:1.55rem; }
+    .how-intro p { margin:0; color:#424633; }
+    .how-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin:20px 0; }
+    .power-card { display:flex; gap:16px; align-items:flex-start; padding:20px; border:2px solid var(--ink); border-radius:20px; background:var(--white); box-shadow:5px 5px 0 var(--ink); }
+    .power-icon { flex:0 0 52px; width:52px; height:52px; display:grid; place-items:center; border-radius:16px; color:white; font-size:1.8rem; font-weight:1000; }
+    .power-card b { display:block; font-size:1.08rem; margin:1px 0 4px; }
+    .power-card p { margin:0 0 8px; color:var(--muted); font-size:.9rem; }
+    .power-card small { display:inline-block; padding:3px 9px; border-radius:99px; background:#f1eee6; font-weight:900; font-size:.72rem; }
+    .power-giant .power-icon { background:#ed7a43; }
+    .power-multi .power-icon { background:#4658d9; }
+    .power-slow .power-icon { background:#35a9a0; }
+    .power-shield .power-icon { background:#9a6bd4; }
+    .power-boost .power-icon { background:#e5a72c; }
+    .fever-box { display:flex; align-items:center; gap:22px; padding:24px; border-radius:22px; color:white; background:var(--ink); }
+    .fever-stamp { flex:0 0 116px; padding:15px 8px; text-align:center; color:var(--ink); background:var(--coral); border:3px solid white; border-radius:15px; font-weight:1000; font-size:1.25rem; transform:rotate(-7deg); }
+    .fever-box h3 { margin:0 0 6px; font-size:1.4rem; }
+    .fever-box p { margin:0; color:#d4d5df; }
+    .how-bottom { margin-top:16px; padding:16px 20px; border:2px dashed var(--coral); border-radius:16px; text-align:center; font-weight:800; }
+
     .games { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
     .game-card { display:flex; flex-direction:column; padding:22px; min-height:255px; border-radius:var(--radius); background:var(--white); border:1px solid var(--line); box-shadow:var(--shadow); }
     .game-card-top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
@@ -126,7 +149,9 @@
       nav { width:100%; flex-wrap:wrap; gap:2px; }
       nav a { padding:7px 10px; font-size:.82rem; }
       .wrap { width:min(var(--max),calc(100% - 28px)); }
-      .games { grid-template-columns:1fr; }
+      .games,.how-grid { grid-template-columns:1fr; }
+      .how-intro { grid-template-columns:1fr; }
+      .fever-box { align-items:flex-start; flex-direction:column; }
       .section-title { align-items:flex-start; flex-direction:column; gap:4px; }
       .featured { padding:17px; }
       .feature-art { min-height:210px; }
@@ -187,6 +212,30 @@
             <a class="button button-primary" href="/games/dopaball/">DOPABALLを遊ぶ ↗</a>
           </div>
         </article>
+      </div>
+    </section>
+
+
+    <section id="how-to-play" class="how-to-play">
+      <div class="wrap">
+        <div class="section-title"><h2>遊び方、ぜんぶ教えます。</h2><p>ただ跳ね返すだけじゃ終わらない。</p></div>
+        <div class="how-intro">
+          <div class="how-number">01</div>
+          <div><h3>ラリーをつないで、コンボを育てろ！</h3>
+          <p>パドルを左右に動かしてボールを打ち返そう。打ち返すたびにコンボが増え、3コンボごとに得点倍率もアップ。さらにボールのスピードも少しずつ上がっていく。ミスせず続けるほど、スコアがどんどん伸びるぞ！</p></div>
+        </div>
+        <div class="how-grid">
+          <article class="power-card power-giant"><span class="power-icon">↔</span><div><b>パドル巨大化</b><p>パドルの横幅が広がる！ボールを受け止めやすくなるぞ。</p><small>約6秒間</small></div></article>
+          <article class="power-card power-multi"><span class="power-icon">✳</span><div><b>マルチボール</b><p>ボールが最大2個追加！一気に得点を稼ぐチャンス。画面上のボールは最大7個。</p><small>追加ボールで大混戦！</small></div></article>
+          <article class="power-card power-slow"><span class="power-icon">◷</span><div><b>スローモーション</b><p>時間の流れがゆっくりに。速くなったボールを落ち着いて打ち返そう。</p><small>約7秒間</small></div></article>
+          <article class="power-card power-shield"><span class="power-icon">◇</span><div><b>シールド</b><p>ボールを落としてしまっても、1回だけミスを防いでくれる保険アイテム。</p><small>約8秒間・1回発動</small></div></article>
+          <article class="power-card power-boost"><span class="power-icon">★</span><div><b>スコアブースト</b><p>獲得スコアが1.5倍に！コンボをつないでいるときに取れたら最高。</p><small>約7秒間</small></div></article>
+        </div>
+        <div class="fever-box">
+          <div class="fever-stamp">FEVER!!</div>
+          <div><h3>10コンボ到達でフィーバー突入！</h3><p>10コンボ以上になると、通常より大きくスコアを獲得できるフィーバー状態に。コンボを切らさず、アイテムも味方につけて自己ベストを更新しよう！</p></div>
+        </div>
+        <div class="how-bottom"><b>ハートは3つ。</b> ボールを落とすと1つ減る。全部なくなる前に、どこまでスコアを伸ばせるか挑戦だ！</div>
       </div>
     </section>
 
