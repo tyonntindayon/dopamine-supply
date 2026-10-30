@@ -83,6 +83,12 @@
       display:grid; grid-template-columns:.9fr 1.1fr; gap:34px; align-items:center;
       padding:28px; background:var(--white); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);
     }
+    .featured-dopaball { grid-template-columns:.78fr 1.22fr; row-gap:30px; }
+    .featured-dopaball .how-content { grid-column:1 / -1; min-width:0; padding-top:28px; border-top:2px dashed var(--line); }
+    .featured-dopaball .how-content .section-title { margin-bottom:18px; }
+    .featured-dopaball .how-intro { transform:none; }
+    .featured-dopaball .how-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+
     .feature-art {
       min-height:270px; display:grid; place-items:center; border-radius:19px;
       background:var(--lime); position:relative; overflow:hidden;
@@ -141,6 +147,7 @@
     .dopa-joke strong { color:#d94f3c; font-size:1.1rem; }
     @media(max-width:800px) {
       .hero-grid,.featured,.about { grid-template-columns:1fr; }
+      .featured-dopaball .how-content { grid-column:auto; }
       .hero { padding-top:48px; }
       .hero-art { min-height:310px; }
     }
@@ -150,6 +157,7 @@
       nav a { padding:7px 10px; font-size:.82rem; }
       .wrap { width:min(var(--max),calc(100% - 28px)); }
       .games,.how-grid { grid-template-columns:1fr; }
+      .featured-dopaball .how-grid { grid-template-columns:1fr; }
       .how-intro { grid-template-columns:1fr; }
       .fever-box { align-items:flex-start; flex-direction:column; }
       .section-title { align-items:flex-start; flex-direction:column; gap:4px; }
@@ -202,42 +210,39 @@
     <section id="featured">
       <div class="wrap">
         <div class="section-title"><h2>いま遊べるゲーム</h2><p>まずはここから！</p></div>
-        <article class="featured">
+        <article class="featured featured-dopaball">
           <div class="feature-art"><span class="feature-icon" aria-hidden="true">🏓</span></div>
-          <div>
+          <div class="feature-main">
             <span class="status">公開中・すぐに遊べる</span>
             <h3>DOPABALL</h3>
             <p>パドルを左右に動かしてボールを打ち返し、できるだけ長くラリーを続けよう。連続で打ち返してコンボをつなげばスコアアップ。フィーバーやアイテムも活用して、自己ベスト更新を目指そう！</p>
             <div class="feature-points"><span>パドル操作</span><span>コンボで得点アップ</span><span>フィーバー</span><span>ランキング</span></div>
             <a class="button button-primary" href="/games/dopaball/">DOPABALLを遊ぶ ↗</a>
           </div>
+          <div class="how-content">
+            <div class="section-title"><h2>遊び方、ぜんぶ教えます。</h2><p>ただ跳ね返すだけじゃ終わらない。</p></div>
+            <div class="how-intro">
+              <div class="how-number">01</div>
+              <div><h3>ラリーをつないで、コンボを育てろ！</h3>
+              <p>パドルを左右に動かしてボールを打ち返そう。打ち返すたびにコンボが増え、3コンボごとに得点倍率もアップ。さらにボールのスピードも少しずつ上がっていく。ミスせず続けるほど、スコアがどんどん伸びるぞ！</p></div>
+            </div>
+            <div class="how-grid">
+              <article class="power-card power-giant"><span class="power-icon">↔</span><div><b>パドル巨大化</b><p>パドルの横幅が広がる！</p></div></article>
+              <article class="power-card power-multi"><span class="power-icon">✳</span><div><b>マルチボール</b><p>ボールが最大2個追加される！</p></div></article>
+              <article class="power-card power-slow"><span class="power-icon">◷</span><div><b>スローモーション</b><p>ボールの動きが一定時間ゆっくりに！</p></div></article>
+              <article class="power-card power-shield"><span class="power-icon">◇</span><div><b>シールド</b><p>ボールを落としても1回だけミスを防ぐ！</p></div></article>
+              <article class="power-card power-boost"><span class="power-icon">★</span><div><b>スコアブースト</b><p>獲得スコアが一定時間1.5倍に！</p></div></article>
+            </div>
+            <div class="fever-box">
+              <div class="fever-stamp">FEVER!!</div>
+              <div><h3>10コンボ到達でフィーバー突入！</h3><p>10コンボ以上になると、通常より大きくスコアを獲得できるフィーバー状態に。コンボを切らさず、アイテムも味方につけて自己ベストを更新しよう！</p></div>
+            </div>
+            <div class="how-bottom"><b>ハートは3つ。</b> ボールを落とすと1つ減る。全部なくなる前に、どこまでスコアを伸ばせるか挑戦だ！</div>
+          </div>
         </article>
       </div>
     </section>
 
-
-    <section id="how-to-play" class="how-to-play">
-      <div class="wrap">
-        <div class="section-title"><h2>遊び方、ぜんぶ教えます。</h2><p>ただ跳ね返すだけじゃ終わらない。</p></div>
-        <div class="how-intro">
-          <div class="how-number">01</div>
-          <div><h3>ラリーをつないで、コンボを育てろ！</h3>
-          <p>パドルを左右に動かしてボールを打ち返そう。打ち返すたびにコンボが増え、3コンボごとに得点倍率もアップ。さらにボールのスピードも少しずつ上がっていく。ミスせず続けるほど、スコアがどんどん伸びるぞ！</p></div>
-        </div>
-        <div class="how-grid">
-          <article class="power-card power-giant"><span class="power-icon">↔</span><div><b>パドル巨大化</b><p>パドルの横幅が広がる！</p></div></article>
-          <article class="power-card power-multi"><span class="power-icon">✳</span><div><b>マルチボール</b><p>ボールが最大2個追加される！</p></div></article>
-          <article class="power-card power-slow"><span class="power-icon">◷</span><div><b>スローモーション</b><p>ボールの動きが一定時間ゆっくりに！</p></div></article>
-          <article class="power-card power-shield"><span class="power-icon">◇</span><div><b>シールド</b><p>ボールを落としても1回だけミスを防ぐ！</p></div></article>
-          <article class="power-card power-boost"><span class="power-icon">★</span><div><b>スコアブースト</b><p>獲得スコアが一定時間1.5倍に！</p></div></article>
-        </div>
-        <div class="fever-box">
-          <div class="fever-stamp">FEVER!!</div>
-          <div><h3>10コンボ到達でフィーバー突入！</h3><p>10コンボ以上になると、通常より大きくスコアを獲得できるフィーバー状態に。コンボを切らさず、アイテムも味方につけて自己ベストを更新しよう！</p></div>
-        </div>
-        <div class="how-bottom"><b>ハートは3つ。</b> ボールを落とすと1つ減る。全部なくなる前に、どこまでスコアを伸ばせるか挑戦だ！</div>
-      </div>
-    </section>
 
     <section id="games">
       <div class="wrap">
