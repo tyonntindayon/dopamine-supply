@@ -404,6 +404,37 @@
       body:before, .hero, .hero:before, .hero:after, .hero-dopa, .hero-ticker, .hero-ticker div, .hero-art, .arcade, .arcade-label span:first-child, .screen-ball, .hero-sticker, .hero-spark { animation:none !important; }
     }
   
+    /* NEON GLOW ON EVERY WORD */
+    body :where(h1,h2,h3,h4,p,a,button,span,b,strong,small,em,li,label) {
+      text-shadow:
+        0 0 3px rgba(255,255,255,.78),
+        0 0 8px rgba(255,207,69,.9),
+        0 0 16px rgba(255,92,168,.72),
+        0 0 28px rgba(70,88,217,.58);
+      animation-name:dopa-every-word, dopa-text-neon;
+      animation-duration:1.15s, 1.8s;
+      animation-timing-function:ease-in-out, ease-in-out;
+      animation-iteration-count:infinite, infinite;
+      animation-direction:alternate, alternate;
+    }
+    body :where(h1,h2,h3) {
+      text-shadow:
+        0 0 4px #fff,
+        0 0 10px #ffcf45,
+        0 0 22px #ff5ca8,
+        0 0 38px #4658d9;
+    }
+    @keyframes dopa-text-neon {
+      0% {
+        text-shadow:0 0 2px rgba(255,255,255,.65),0 0 7px rgba(255,207,69,.65),0 0 14px rgba(255,92,168,.45);
+        filter:brightness(1) saturate(1.1);
+      }
+      100% {
+        text-shadow:0 0 5px #fff,0 0 12px #ffcf45,0 0 24px #ff5ca8,0 0 42px #4658d9;
+        filter:brightness(1.3) saturate(1.8);
+      }
+    }
+
     /* EVERY WORD GETS THE DOPA TREATMENT */
     body :where(h1,h2,h3,h4,p,a,button,span,b,strong,small,em,li,label) {
       animation: dopa-every-word 1.15s ease-in-out infinite alternate;
