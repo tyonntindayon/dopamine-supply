@@ -69,6 +69,39 @@
       box-shadow: 0 0 0 5px rgba(241,107,80,.8), 0 12px 32px rgba(0,0,0,.28);
     }
     .featured p, .game-card p { color: #e1e1ee; }
+    /* GAME TITLE JACKPOT MOTION */
+    .game-title-dopa {
+      display:inline-block;
+      color:#ffcf45;
+      -webkit-text-stroke:1px #20243a;
+      text-shadow:3px 4px 0 #20243a, 0 0 18px rgba(255,207,69,.8);
+      animation:dopa-game-title .9s ease-in-out infinite alternate;
+      transform-origin:center;
+    }
+    @keyframes dopa-game-title {
+      from { transform:translateY(0) rotate(-2deg) scale(1); filter:hue-rotate(0deg); }
+      to { transform:translateY(-5px) rotate(2deg) scale(1.055); filter:hue-rotate(55deg); }
+    }
+    .feature-art { position:relative; }
+    .feature-art .feature-wordmark {
+      position:relative; z-index:2; font-size:clamp(2.3rem,5vw,4rem);
+      font-weight:1000; letter-spacing:-.08em; color:#ffcf45;
+      -webkit-text-stroke:2px #20243a; text-shadow:5px 6px 0 #20243a;
+      transform:rotate(-7deg);
+    }
+    .feature-art:after {
+      content:""; position:absolute; z-index:1; width:28px; height:28px;
+      border-radius:50%; background:#ffcf45; border:4px solid #20243a;
+      top:24%; right:22%; box-shadow:0 0 24px #ffcf45;
+      animation:dopa-feature-ball .8s ease-in-out infinite alternate;
+    }
+    @keyframes dopa-feature-ball { to { transform:translate(-75px,105px) scale(1.25); } }
+    .game-symbol {
+      color:#ffcf45; background:#20243a !important; border:2px solid #ffcf45;
+      font-size:1rem !important; font-weight:1000; letter-spacing:-.06em;
+    }
+    .game-symbol .symbol-word { animation:dopa-game-title .9s ease-in-out infinite alternate; }
+    .game-card:nth-child(2) .game-symbol { background:#20243a !important; }
     .feature-points span, .power-card small {
       color: #20243a;
       background: #ffcf45;
@@ -370,6 +403,18 @@
       .button:hover { transform:none; }
       body:before, .hero, .hero:before, .hero:after, .hero-dopa, .hero-ticker, .hero-ticker div, .hero-art, .arcade, .arcade-label span:first-child, .screen-ball, .hero-sticker, .hero-spark { animation:none !important; }
     }
+      /* FINAL DOPA OVERRIDES: full-page stripes + animated game wordmarks */
+    body { background:#20243a !important; color:#fffefa !important; }
+    .hero { background:transparent !important; }
+    .button-plain { color:#fffefa; background:#20243a; border:2px solid #ffcf45; }
+    .arcade { background:#20243a; color:#fffefa; }
+    .arcade-label { color:#ffcf45; }
+    .feature-art { background:linear-gradient(135deg,#ffcf45,#f16b50,#4658d9) !important; }
+    .featured, .game-card { background:rgba(32,36,58,.94) !important; }
+    .featured h3, .game-card h3 { color:#fffefa; }
+    @media(prefers-reduced-motion:reduce) {
+      .game-title-dopa, .game-symbol .symbol-word, .feature-art:after { animation:none !important; }
+    }
   </style>
 </head>
 <body>
@@ -406,7 +451,7 @@
           <span class="hero-sticker sticker-top">脳汁<br>供給中</span>
           <span class="hero-sticker sticker-side">もう1回!!</span>
           <div class="arcade">
-            <div class="arcade-label"><span>DOPAMINE SUPPLY</span><span>🎮</span></div>
+            <div class="arcade-label"><span>DOPAMINE SUPPLY</span><span>ARCADE</span></div>
             <div class="screen"><div class="screen-ball"></div><div class="screen-paddle"></div><span class="screen-hit">+100</span></div>
             <div class="arcade-bottom"><span>PLAY!</span><span>PLAY!</span><span>PLAY!</span></div>
           </div>
@@ -421,10 +466,10 @@
       <div class="wrap">
         <div class="section-title"><h2>いま遊べるゲーム</h2><p>まずはここから！</p></div>
         <article class="featured featured-dopaball">
-          <div class="feature-art"><span class="feature-icon" aria-hidden="true">🏓</span></div>
+          <div class="feature-art"><span class="feature-wordmark game-title-dopa" aria-hidden="true">DOPABALL</span></div>
           <div class="feature-main">
             <span class="status">公開中・すぐに遊べる</span>
-            <h3>DOPABALL</h3>
+            <h3><span class="game-title-dopa">DOPABALL</span></h3>
             <p>パドルを左右に動かしてボールを打ち返し、できるだけ長くラリーを続けよう。連続で打ち返してコンボをつなげばスコアアップ。フィーバーやアイテムも活用して、自己ベスト更新を目指そう！</p>
             <div class="feature-points"><span>パドル操作</span><span>コンボで得点アップ</span><span>フィーバー</span><span>ランキング</span></div>
             <a class="button button-primary" href="/games/dopaball/">DOPABALLを遊ぶ ↗</a>
@@ -459,14 +504,14 @@
         <div class="section-title"><h2>ゲーム一覧</h2><p>これからも新しいゲームを追加予定。</p></div>
         <div class="games">
           <article class="game-card">
-            <div class="game-card-top"><span class="game-symbol">🏓</span><span class="pill">公開中</span></div>
+            <div class="game-card-top"><span class="game-symbol"><span class="symbol-word">DOPA</span></span><span class="pill">公開中</span></div>
             <h3>DOPABALL</h3>
             <p>ボールを打ち返してコンボをつなぐ、スコアアタック型のアーケードゲーム。フィーバーを狙ってハイスコアに挑戦しよう。</p>
             <div class="card-bottom"><span class="text-link">プレイ可能</span><a class="text-link" href="/games/dopaball/">ゲームを始める ↗</a></div>
           </article>
           <article class="game-card">
-            <div class="game-card-top"><span class="game-symbol">⬆️</span><span class="pill wait">開発中</span></div>
-            <h3>DOPAUP ⇧</h3>
+            <div class="game-card-top"><span class="game-symbol"><span class="symbol-word">UP ⇧</span></span><span class="pill wait">開発中</span></div>
+            <h3><span class="game-title-dopa">DOPAUP ⇧</span></h3>
             <p>TGAMESの新作ゲームを開発中。どんな遊びになるのか、公開をお楽しみに！</p>
             <div class="card-bottom"><span class="text-link">近日公開予定</span><span class="text-link">ただいま制作中</span></div>
           </article>
