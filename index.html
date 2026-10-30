@@ -4,431 +4,340 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ドーパミン供給場 | DOPAMINE SUPPLY</title>
-<meta name="description" content="Tgamesが運営するカラフルなブラウザゲームプラットフォーム">
+<title>DOPAMINE SUPPLY — Play something fun.</title>
+<meta name="description" content="ドーパミン供給場。気軽に遊べるゲームが集まる場所。">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap');
+
 :root {
-  --bg:#070d2b;
-  --panel:#101b48;
-  --blue:#16d9ff;
-  --pink:#ff35c9;
-  --yellow:#ffe52e;
-  --purple:#8b5cff;
-  --white:#fff;
+  --blue:#3155e7;
+  --orange:#ff7045;
+  --yellow:#ffd84d;
+  --pink:#ff8eb5;
+  --ink:#20212b;
+  --paper:#fffdf5;
+  --muted:#85858c;
+  --line:#e9e5d9;
 }
 * {box-sizing:border-box}
-html {scroll-behavior:smooth}
 body {
   margin:0;
-  background:var(--bg);
-  color:white;
-  font-family:Arial,"Noto Sans JP",sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'DM Sans','Noto Sans JP',sans-serif;
 }
 a {color:inherit;text-decoration:none}
 button,input {font:inherit}
+.topline {height:7px;background:linear-gradient(90deg,var(--blue) 0 25%,var(--yellow) 25% 50%,var(--orange) 50% 75%,var(--pink) 75%)}
 header {
-  min-height:78px;
-  padding:12px 3%;
+  height:76px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:20px;
-  background:#080f35;
-  border-bottom:1px solid #26366e;
+  padding:0 5.5%;
+  border-bottom:1px solid var(--line);
+  background:var(--paper);
   position:sticky;
   top:0;
   z-index:10;
 }
-.logo {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:19px;
-  font-weight:1000;
-  white-space:nowrap;
+.brand {display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-1.2px;font-size:21px}
+.brand-mark {
+  width:35px;height:35px;border-radius:11px;background:var(--blue);
+  color:white;display:grid;place-items:center;font-size:21px;
+  transform:rotate(-7deg);
 }
-.logo-icon {
-  width:43px;height:43px;
-  border-radius:15px;
-  display:grid;place-items:center;
-  background:linear-gradient(135deg,#00e5ff,#ff35c9,#ffe52e);
-  font-size:25px;
-}
-.logo small {
-  display:block;
-  color:var(--blue);
-  font-size:8px;
-  letter-spacing:4px;
-}
-nav {display:flex;gap:23px;font-size:13px;font-weight:bold}
-nav a:hover {color:var(--yellow)}
+.brand span:last-child {color:var(--blue)}
+nav {display:flex;gap:28px;font-size:13px;font-weight:700}
+nav a:hover {color:var(--blue)}
+.header-right {display:flex;align-items:center;gap:12px}
 .search {
-  width:230px;
-  padding:11px 15px;
-  border:1px solid #4659a0;
-  border-radius:30px;
-  background:#101b48;
-  color:white;
-  outline:none;
+  width:190px;border:1px solid var(--line);border-radius:30px;
+  background:white;padding:10px 15px;outline:none;font-size:12px;
 }
+.search:focus {border-color:var(--blue)}
+.menu-button {display:none;border:0;background:none;font-size:24px}
+main {max-width:1200px;margin:auto;padding:0 5.5%}
 .hero {
-  min-height:390px;
-  padding:55px 6%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:25px;
-  overflow:hidden;
-  background:
-    radial-gradient(circle at 75% 40%,#3d168d 0,transparent 35%),
-    linear-gradient(120deg,#07133d,#11105a,#10103c);
-  border-bottom:3px solid #243b82;
-  position:relative;
+  padding:47px 0 34px;
+  display:grid;grid-template-columns:1.05fr .95fr;gap:35px;align-items:center;
 }
-.hero::before {
-  content:"✦  ★  ◆  ✧  ★  ✦";
-  position:absolute;
-  right:3%;top:10%;
-  color:#16d9ff;
-  font-size:65px;
-  opacity:.35;
-  transform:rotate(-15deg);
-}
-.hero-text {max-width:570px;z-index:1}
-.hero-label {
-  color:var(--yellow);
-  font-size:12px;
-  font-weight:bold;
-  letter-spacing:3px;
-}
+.eyebrow {font-size:11px;font-weight:900;letter-spacing:2px;color:var(--orange)}
 .hero h1 {
-  font-size:clamp(42px,6vw,76px);
-  line-height:1.2;
-  margin:20px 0;
-  font-weight:1000;
-  text-shadow:4px 5px 0 #172c73;
+  font-size:clamp(42px,6vw,72px);line-height:.98;
+  letter-spacing:-4px;margin:15px 0 18px;font-weight:900;
 }
-.hero h1 span {
-  color:var(--yellow);
-  text-shadow:4px 5px 0 #a74b11;
+.hero h1 em {font-style:normal;color:var(--blue)}
+.hero p {color:#777681;font-size:14px;line-height:1.9;margin:0 0 25px}
+.primary-button {
+  display:inline-flex;align-items:center;gap:12px;
+  padding:14px 21px;border-radius:9px;background:var(--blue);
+  color:white;font-size:13px;font-weight:800;
+  box-shadow:0 4px 0 #203ab0;transition:.15s;
 }
-.hero p {color:#d5ddff;line-height:1.9}
-.main-button {
-  display:inline-block;
-  margin-top:15px;
-  padding:15px 30px;
-  border-radius:35px;
-  background:linear-gradient(100deg,var(--yellow),#ff8a38,var(--pink));
-  color:#101039;
-  font-weight:1000;
-  box-shadow:0 5px 20px #ff35c966;
-  transition:.2s;
+.primary-button:hover {transform:translateY(-2px);box-shadow:0 6px 0 #203ab0}
+.hero-art {
+  min-height:265px;border-radius:20px;background:var(--yellow);
+  position:relative;overflow:hidden;display:flex;align-items:center;
+  justify-content:center;
 }
-.main-button:hover {transform:scale(1.06)}
-.mascot {
-  width:250px;height:250px;
-  flex-shrink:0;
-  border-radius:45% 55% 48% 52%;
-  display:grid;place-items:center;
-  font-size:125px;
-  background:linear-gradient(135deg,#ffe52e,#ff9d28,#ff35c9);
-  border:8px solid #fff;
-  box-shadow:0 0 45px #ff35c9,0 0 90px #16d9ff66;
-  animation:float 4s ease-in-out infinite;
+.hero-art:before {
+  content:"";position:absolute;width:230px;height:230px;
+  border:3px solid rgba(32,33,43,.12);border-radius:50%;
 }
-@keyframes float {
-  0%,100% {transform:translateY(0) rotate(-4deg)}
-  50% {transform:translateY(-13px) rotate(4deg)}
+.hero-art:after {
+  content:"";position:absolute;width:170px;height:170px;
+  border:3px solid rgba(32,33,43,.12);border-radius:50%;
 }
-main {padding:35px 3% 70px}
-.categories {
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-bottom:38px;
+.arcade-screen {
+  width:64%;height:150px;background:var(--blue);border:7px solid var(--ink);
+  border-radius:15px;transform:rotate(-5deg);z-index:1;
+  display:flex;align-items:center;justify-content:center;
+  color:white;font-weight:900;font-size:clamp(23px,3vw,39px);
+  letter-spacing:-2px;box-shadow:9px 10px 0 rgba(32,33,43,.17);
 }
+.sticker {
+  position:absolute;z-index:2;background:var(--pink);color:var(--ink);
+  border:3px solid var(--ink);border-radius:50%;width:67px;height:67px;
+  display:grid;place-items:center;font-size:27px;right:9%;top:12%;
+  transform:rotate(12deg);
+}
+.sticker-two {
+  position:absolute;z-index:2;left:8%;bottom:12%;
+  background:var(--orange);border:3px solid var(--ink);
+  border-radius:8px;padding:9px 12px;font-size:11px;font-weight:900;
+  transform:rotate(-8deg);
+}
+.ticker {
+  background:var(--ink);color:white;padding:11px 0;overflow:hidden;
+  white-space:nowrap;font-size:11px;font-weight:800;letter-spacing:2px;
+}
+.ticker span {padding-right:35px}
+.ticker b {color:var(--yellow);padding:0 9px}
+.section-head {
+  display:flex;align-items:end;justify-content:space-between;
+  margin:42px 0 18px;
+}
+.section-head h2 {font-size:25px;letter-spacing:-1px;margin:0;font-weight:900}
+.section-head p {font-size:11px;color:var(--muted);margin:5px 0 0}
+.view-all {font-size:12px;color:var(--blue);font-weight:800}
+.categories {display:flex;gap:9px;flex-wrap:wrap;margin-bottom:23px}
 .category {
-  border:1px solid #40528f;
-  background:#122052;
-  color:white;
-  border-radius:30px;
-  padding:11px 20px;
-  cursor:pointer;
-  font-size:12px;
-  font-weight:bold;
+  border:1px solid var(--line);background:white;border-radius:30px;
+  padding:9px 17px;font-size:11px;font-weight:800;cursor:pointer;
+  transition:.15s;
 }
-.category:hover,.category.active {
-  background:var(--yellow);
-  border-color:var(--yellow);
-  color:#11143a;
-}
-.section {margin:38px 0 55px}
-.section-title {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
-}
-.section-title h2 {font-size:24px;margin:0}
-.section-title h2 span {color:var(--yellow)}
-.section-title small {color:var(--blue)}
+.category:hover,.category.active {background:var(--ink);color:white;border-color:var(--ink)}
 .games {
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:17px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:17px;
+  padding-bottom:45px;
 }
-.game-card {
-  min-width:0;
-  overflow:hidden;
-  border:1px solid #4055a1;
-  border-radius:15px;
-  background:#101b48;
-  transition:.2s;
+.game-card {min-width:0;cursor:pointer}
+.game-image {
+  height:150px;border-radius:13px;display:grid;place-items:center;
+  position:relative;overflow:hidden;border:1px solid rgba(0,0,0,.04);
+  transition:transform .2s;
 }
-.game-card:hover {
-  transform:translateY(-6px);
-  border-color:var(--pink);
-  box-shadow:0 10px 25px #0008;
+.game-card:hover .game-image {transform:translateY(-5px) rotate(-1deg)}
+.game-image .emoji {font-size:57px;filter:drop-shadow(3px 5px 0 rgba(0,0,0,.12))}
+.game-image .number {
+  position:absolute;top:10px;left:10px;background:white;
+  padding:5px 8px;border-radius:5px;font-size:9px;font-weight:900;
 }
-.game-art {
-  height:155px;
-  display:grid;
-  place-items:center;
-  position:relative;
-  overflow:hidden;
+.game-image .play {
+  position:absolute;right:10px;bottom:10px;width:32px;height:32px;
+  background:white;border-radius:50%;display:grid;place-items:center;
+  font-size:13px;opacity:0;transform:scale(.8);transition:.2s;
 }
-.art-ball {background:linear-gradient(135deg,#00c9ff,#5c31d9,#ff35c9)}
-.art-up {background:linear-gradient(135deg,#3311a9,#8b5cff,#16d9ff)}
-.art-new {background:linear-gradient(135deg,#ff8a38,#ff35c9,#8b5cff)}
-.art-game {font-size:80px;filter:drop-shadow(0 5px 8px #0008)}
-.art-tag {
-  position:absolute;
-  top:10px;left:10px;
-  padding:5px 9px;
-  border-radius:20px;
-  background:var(--yellow);
-  color:#11143a;
-  font-size:9px;
-  font-weight:1000;
+.game-card:hover .play {opacity:1;transform:scale(1)}
+.game-info {padding:11px 2px}
+.game-info h3 {font-size:14px;margin:0 0 5px;font-weight:900}
+.game-info p {font-size:10px;color:var(--muted);margin:0}
+.game-card.coming {opacity:.72;cursor:default}
+.game-card.coming:hover .game-image {transform:none}
+.game-card.coming .play {display:none}
+.empty {grid-column:1/-1;text-align:center;padding:45px;color:var(--muted);font-size:13px}
+.about {
+  background:#f1eee4;border-radius:17px;padding:28px 32px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  margin-bottom:55px;
 }
-.game-info {padding:14px}
-.game-info h3 {margin:0 0 8px;font-size:17px}
-.game-info p {margin:0 0 12px;color:#aab8e8;font-size:11px}
-.tags {display:flex;gap:6px;flex-wrap:wrap}
-.tag {
-  border-radius:20px;
-  padding:4px 8px;
-  background:#263d80;
-  color:#dce6ff;
-  font-size:9px;
-}
-.play-button {
-  display:block;
-  margin-top:13px;
-  text-align:center;
-  padding:9px;
-  border-radius:25px;
-  background:linear-gradient(90deg,#16d9ff,#8b5cff,#ff35c9);
-  font-weight:bold;
-  font-size:12px;
-}
-.coming {
-  display:block;
-  text-align:center;
-  padding:9px;
-  border-radius:25px;
-  background:#28345e;
-  color:#aeb9e5;
-  font-size:11px;
-}
-.empty {
-  color:#b8c3ed;
-  padding:30px;
-  text-align:center;
-  display:none;
-}
-.banner {
-  padding:30px;
-  border-radius:18px;
-  background:linear-gradient(110deg,#0bafd5,#6550e9,#eb36b9);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:20px;
-}
-.banner h2 {margin:0 0 8px}
-.banner p {margin:0;color:#fff}
-.banner-icon {font-size:65px}
+.about h2 {margin:0 0 7px;font-size:20px;letter-spacing:-.7px}
+.about p {margin:0;color:#777681;font-size:12px;line-height:1.8}
+.about-mark {font-size:39px}
 footer {
-  padding:30px 5%;
-  border-top:1px solid #26366e;
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  flex-wrap:wrap;
-  color:#aab8e8;
-  font-size:11px;
+  border-top:1px solid var(--line);padding:25px 5.5%;
+  display:flex;justify-content:space-between;align-items:center;
+  color:var(--muted);font-size:10px;
 }
-footer strong {color:white}
-@media(max-width:900px) {
-  .games {grid-template-columns:repeat(2,minmax(0,1fr))}
-  nav {gap:12px}
-  .search {width:170px}
-  .mascot {width:190px;height:190px;font-size:90px}
+footer strong {color:var(--blue);letter-spacing:1px}
+@media(max-width:800px) {
+  header {padding:0 5%;height:65px}
+  nav {display:none}
+  .menu-button {display:block}
+  .search {width:145px}
+  main {padding:0 5%}
+  .hero {grid-template-columns:1fr;padding-top:35px;gap:25px}
+  .hero-art {min-height:220px}
+  .games {grid-template-columns:repeat(2,1fr);gap:12px}
+  .game-image {height:135px}
+  .about {padding:23px;align-items:flex-start}
 }
-@media(max-width:600px) {
-  header {flex-wrap:wrap;padding:12px 4%}
-  .logo {font-size:15px}
-  nav {order:3;width:100%;justify-content:center}
-  .search {width:100%;order:4}
-  .hero {padding:55px 6%;min-height:340px}
-  .mascot {width:110px;height:110px;font-size:55px;border-width:4px}
-  .hero h1 {font-size:43px}
-  main {padding:25px 4% 50px}
-  .games {grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-  .game-art {height:120px}
-  .art-game {font-size:60px}
-  .game-info {padding:10px}
-  .game-info h3 {font-size:14px}
-  .banner {padding:22px}
-  .banner-icon {font-size:40px}
+@media(max-width:420px) {
+  .brand {font-size:17px}
+  .brand-mark {width:30px;height:30px}
+  .search {width:112px;padding:9px 11px}
+  .hero h1 {letter-spacing:-2.5px}
+  .section-head h2 {font-size:21px}
+  .game-image {height:115px}
+  .game-image .emoji {font-size:45px}
+  footer {gap:12px;flex-wrap:wrap}
 }
 </style>
 </head>
 <body>
-
+<div class="topline"></div>
 <header>
-  <a class="logo" href="#">
-    <span class="logo-icon">😎</span>
-    <span>ドーパミン供給場
-      <small>DOPAMINE SUPPLY</small>
-    </span>
+  <a class="brand" href="#">
+    <span class="brand-mark">D</span>
+    <span>DOPAMINE <span>SUPPLY</span></span>
   </a>
   <nav>
-    <a href="#">🏠 ホーム</a>
-    <a href="#games">🎮 ゲーム一覧</a>
-    <a href="#ranking">🏆 人気ゲーム</a>
-    <a href="#about">ℹ️ ABOUT</a>
+    <a href="#games">GAMES</a>
+    <a href="#about">ABOUT</a>
   </nav>
-  <input class="search" id="search" type="search" placeholder="ゲームを検索...">
+  <div class="header-right">
+    <input class="search" id="search" type="search" placeholder="ゲームを探す...">
+    <button class="menu-button" aria-label="メニュー">☰</button>
+  </div>
 </header>
 
-<section class="hero">
-  <div class="hero-text">
-    <div class="hero-label">✦ WELCOME TO DOPAMINE SUPPLY ✦</div>
-    <h1>遊びが、<br><span>ドーパミンを供給する。</span></h1>
-    <p>最高のゲームで、最高のひとときを。<br>
-    あなたのお気に入りを見つけよう。</p>
-    <a class="main-button" href="#games">▶ 今すぐ遊ぶ　→</a>
+<main>
+  <section class="hero">
+    <div>
+      <div class="eyebrow">WELCOME TO DOPAMINE SUPPLY</div>
+      <h1>PLAY MORE.<br><em>FEEL GOOD.</em></h1>
+      <p>ちょっとした空き時間に、ちょっとした楽しさを。<br>
+      お気に入りのゲームを見つけよう。</p>
+      <a class="primary-button" href="#games">ゲームを探す <span>↘</span></a>
+    </div>
+    <div class="hero-art">
+      <div class="arcade-screen">LET'S PLAY!</div>
+      <div class="sticker">★</div>
+      <div class="sticker-two">PRESS START!</div>
+    </div>
+  </section>
+</main>
+
+<div class="ticker">
+  <div>
+    <span>NO RULES, JUST FUN <b>✳</b></span>
+    <span>FIND YOUR NEXT GAME <b>✳</b></span>
+    <span>WELCOME TO DOPAMINE SUPPLY <b>✳</b></span>
+    <span>NO RULES, JUST FUN <b>✳</b></span>
   </div>
-  <div class="mascot">😎</div>
-</section>
+</div>
 
 <main>
-  <div class="categories">
-    <button class="category active" data-filter="all">▦ すべて</button>
-    <button class="category" data-filter="action">⚔ アクション</button>
-    <button class="category" data-filter="puzzle">🧩 パズル</button>
-    <button class="category" data-filter="arcade">🎮 アーケード</button>
-    <button class="category" data-filter="race">🏁 レース</button>
-    <button class="category" data-filter="simulation">⚙ シミュレーション</button>
-  </div>
-
-  <section class="section" id="ranking">
-    <div class="section-title">
-      <h2>🔥 人気のゲーム <span>!</span></h2>
-      <small>POPULAR GAMES</small>
+  <section id="games">
+    <div class="section-head">
+      <div>
+        <h2>PLAY SOMETHING.</h2>
+        <p>気になるゲームを選んで遊ぼう。</p>
+      </div>
+      <span class="view-all">ALL GAMES ↗</span>
     </div>
-    <div class="games" id="games">
-      <article class="game-card" data-name="dopa ball ドパボール" data-category="arcade">
-        <div class="game-art art-ball">
-          <span class="art-tag">TGAMES ORIGINAL</span>
-          <span class="art-game">🔮</span>
+
+    <div class="categories">
+      <button class="category active" data-category="all">ALL GAMES</button>
+      <button class="category" data-category="action">ACTION</button>
+      <button class="category" data-category="casual">CASUAL</button>
+      <button class="category" data-category="coming">COMING SOON</button>
+    </div>
+
+    <div class="games" id="gameList">
+      <a class="game-card" href="games/dopaball/" data-category="action" data-name="dopa ball ドーパボール">
+        <div class="game-image" style="background:#b9d8ff">
+          <span class="number">01 / ACTION</span>
+          <span class="emoji">🏀</span>
+          <span class="play">▶</span>
         </div>
         <div class="game-info">
           <h3>DoPa Ball</h3>
-          <p>ボールを操るアーケードゲーム</p>
-          <div class="tags"><span class="tag">アーケード</span><span class="tag">オリジナル</span></div>
-          <a class="play-button" href="games/dopaball/">▶ プレイ</a>
+          <p>タイミングを見極めろ。</p>
         </div>
-      </article>
+      </a>
 
-      <article class="game-card" data-name="dopaup ドーパップ" data-category="action">
-        <div class="game-art art-up">
-          <span class="art-tag">COMING SOON</span>
-          <span class="art-game">⬆️</span>
+      <div class="game-card coming" data-category="coming" data-name="dopaup">
+        <div class="game-image" style="background:#ffb9d0">
+          <span class="number">02 / COMING SOON</span>
+          <span class="emoji">⬆️</span>
         </div>
         <div class="game-info">
           <h3>DOPAUP ⇧</h3>
-          <p>新しい刺激を準備中！</p>
-          <div class="tags"><span class="tag">アクション</span><span class="tag">オリジナル</span></div>
-          <span class="coming">近日公開</span>
+          <p>COMING SOON</p>
         </div>
-      </article>
+      </div>
 
-      <article class="game-card" data-name="new game 新作ゲーム" data-category="puzzle">
-        <div class="game-art art-new">
-          <span class="art-tag">COMING SOON</span>
-          <span class="art-game">🧩</span>
+      <div class="game-card coming" data-category="coming" data-name="new game">
+        <div class="game-image" style="background:#b9ead6">
+          <span class="number">03 / COMING SOON</span>
+          <span class="emoji">🎮</span>
         </div>
         <div class="game-info">
           <h3>NEW GAME</h3>
-          <p>新しいゲームを開発中！</p>
-          <div class="tags"><span class="tag">パズル</span></div>
-          <span class="coming">COMING SOON</span>
+          <p>COMING SOON</p>
         </div>
-      </article>
+      </div>
+
+      <div class="game-card coming" data-category="coming" data-name="new game">
+        <div class="game-image" style="background:#ffe49b">
+          <span class="number">04 / COMING SOON</span>
+          <span class="emoji">🕹️</span>
+        </div>
+        <div class="game-info">
+          <h3>NEW GAME</h3>
+          <p>COMING SOON</p>
+        </div>
+      </div>
     </div>
-    <div class="empty" id="empty">該当するゲームがありません。</div>
   </section>
 
-  <section class="banner" id="about">
+  <section class="about" id="about">
     <div>
-      <h2>もっと遊ぼう！ 🚀</h2>
-      <p>ドーパミン供給場はTgamesが運営するゲームプラットフォームです。</p>
+      <h2>YOUR DAILY DOSE OF FUN.</h2>
+      <p>DOPAMINE SUPPLYは、ゲームを楽しむための小さな遊び場。<br>
+      これから少しずつ、いろんなゲームを増やしていきます。</p>
     </div>
-    <div class="banner-icon">🎮✨</div>
+    <div class="about-mark">✳</div>
   </section>
 </main>
 
 <footer>
-  <strong>😎 DOPAMINE SUPPLY</strong>
-  <span>POWERED BY TGAMES</span>
-  <span>© 2026 TGAMES. ALL RIGHTS RESERVED.</span>
+  <strong>DOPAMINE SUPPLY</strong>
+  <span>© 2026 Tgames. ALL RIGHTS RESERVED.</span>
 </footer>
 
 <script>
-const search = document.getElementById("search");
-const cards = [...document.querySelectorAll(".game-card")];
-const buttons = [...document.querySelectorAll(".category")];
-const empty = document.getElementById("empty");
-let category = "all";
+const search = document.getElementById('search');
+const cards = [...document.querySelectorAll('.game-card')];
+const filters = [...document.querySelectorAll('.category')];
+let activeCategory = 'all';
 
 function updateGames() {
-  const query = search.value.toLowerCase().trim();
-  let count = 0;
-
+  const word = search.value.toLowerCase().trim();
   cards.forEach(card => {
-    const name = card.dataset.name.toLowerCase();
-    const matchName = name.includes(query);
-    const matchCategory = category === "all" ||
-      card.dataset.category === category;
-    const show = matchName && matchCategory;
-
-    card.style.display = show ? "" : "none";
-    if (show) count++;
+    const matchesWord = card.dataset.name.includes(word);
+    const matchesCategory = activeCategory === 'all' ||
+      card.dataset.category === activeCategory;
+    card.style.display = matchesWord && matchesCategory ? '' : 'none';
   });
-
-  empty.style.display = count ? "none" : "block";
 }
-
-search.addEventListener("input", updateGames);
-
-buttons.forEach(button => {
-  button.addEventListener("click", () => {
-    category = button.dataset.filter;
-    buttons.forEach(b => b.classList.remove("active"));
-    button.classList.add("active");
+search.addEventListener('input', updateGames);
+filters.forEach(button => {
+  button.addEventListener('click', () => {
+    activeCategory = button.dataset.category;
+    filters.forEach(item => item.classList.toggle('active', item === button));
     updateGames();
   });
 });
