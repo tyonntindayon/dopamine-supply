@@ -49,8 +49,29 @@
     nav a:hover { background:#ebe7dc; color:var(--ink); }
     nav .nav-play { color:white; background:var(--blue); padding-inline:18px; }
     nav .nav-play:hover { background:#3546c5; color:white; }
-    .hero { padding:76px 0 66px; }
-    .hero-grid { display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:50px; }
+    .hero { padding:66px 0 0; overflow:hidden; }
+    .hero-grid { display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:50px; padding-bottom:62px; }
+    .hero-copy-block { position:relative; z-index:2; }
+    .hero-eyebrow { display:inline-block; margin-top:20px; padding:7px 13px; color:var(--ink); background:var(--lime); border:2px solid var(--ink); border-radius:9px; font-size:.82rem; font-weight:950; transform:rotate(-2deg); }
+    h1 { margin:14px 0 18px; font-size:clamp(3.2rem,7.5vw,6.5rem); line-height:.98; letter-spacing:-.085em; }
+    h1 .hero-dopa { display:inline-block; color:var(--coral); -webkit-text-stroke:2px var(--ink); text-shadow:5px 6px 0 var(--ink); transform:rotate(-3deg); }
+    h1 .hero-main { color:var(--ink); font-size:.68em; letter-spacing:-.075em; }
+    h1 .hero-main em { color:var(--blue); font-style:normal; text-decoration:underline; text-decoration-color:var(--lime); text-decoration-thickness:10px; text-underline-offset:-3px; }
+    .hero-copy { max-width:490px; color:var(--muted); font-size:1.08rem; font-weight:700; }
+    .hero-micro { margin-top:24px; color:var(--muted); font-size:.75rem; font-weight:950; letter-spacing:.08em; }
+    .hero-micro span { color:var(--coral); margin:0 7px; }
+    .hero-art { min-height:390px; }
+    .hero-sticker { position:absolute; z-index:3; display:grid; place-items:center; text-align:center; border:3px solid var(--ink); border-radius:50%; font-weight:1000; line-height:1.1; box-shadow:4px 5px 0 var(--ink); }
+    .sticker-top { width:94px; height:94px; top:18px; left:20px; color:var(--ink); background:var(--lime); transform:rotate(-12deg); }
+    .sticker-side { width:88px; height:88px; right:18px; bottom:65px; color:white; background:var(--coral); transform:rotate(10deg); }
+    .arcade-bottom { display:flex; justify-content:space-between; margin-top:12px; color:var(--blue); font-size:.72rem; font-weight:1000; letter-spacing:.12em; }
+    .screen-hit { position:absolute; top:17px; right:18px; color:var(--lime); font-size:1.8rem; font-weight:1000; transform:rotate(12deg); text-shadow:2px 2px 0 var(--ink); }
+    .hero-spark { position:absolute; z-index:2; color:var(--lime); font-size:3.4rem; font-weight:1000; text-shadow:3px 3px 0 var(--ink); }
+    .spark-one { top:35%; right:8%; transform:rotate(15deg); }
+    .spark-two { bottom:16%; left:10%; color:white; transform:rotate(-12deg); }
+    .hero-ticker { overflow:hidden; background:var(--coral); color:white; border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); white-space:nowrap; transform:rotate(-1deg) scale(1.02); }
+    .hero-ticker div { width:max-content; padding:10px 0; font-size:1rem; font-weight:1000; letter-spacing:.08em; animation:dopa-scroll 24s linear infinite; }
+    @keyframes dopa-scroll { to { transform:translateX(-50%); } }
     .kicker { display:inline-flex; align-items:center; gap:9px; font-size:.82rem; font-weight:900; color:var(--blue); }
     .kicker:before { content:""; width:26px; height:3px; background:var(--coral); border-radius:9px; }
     h1 { margin:18px 0 20px; font-size:clamp(3rem,7vw,6.2rem); line-height:1.08; letter-spacing:-.075em; }
@@ -148,8 +169,13 @@
     @media(max-width:800px) {
       .hero-grid,.featured,.about { grid-template-columns:1fr; }
       .featured-dopaball .how-content { grid-column:auto; }
-      .hero { padding-top:48px; }
+      .hero { padding-top:44px; }
+      .hero-grid { gap:30px; padding-bottom:44px; }
       .hero-art { min-height:310px; }
+      h1 { font-size:clamp(3.2rem,13vw,5.2rem); }
+      .sticker-top { width:76px; height:76px; left:8px; top:10px; font-size:.85rem; }
+      .sticker-side { width:72px; height:72px; right:8px; bottom:55px; font-size:.85rem; }
+      .spark-one { right:4%; }
     }
     @media(max-width:580px) {
       .header-inner { padding:12px 0; align-items:flex-start; flex-direction:column; gap:8px; }
@@ -166,7 +192,7 @@
       .about { padding:22px; }
       .footer-top { flex-direction:column; }
     }
-    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .button:hover { transform:none; } }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .button:hover { transform:none; } .hero-ticker div { animation:none; } }
   </style>
 </head>
 <body>
@@ -188,23 +214,30 @@
   <main id="home">
     <section class="hero">
       <div class="wrap hero-grid">
-        <div>
+        <div class="hero-copy-block">
           <span class="kicker">TGAMES のゲームポータル</span>
-          <h1>遊びが、<br><span>ここに集まる。</span></h1>
-          <p class="hero-copy">ちょっとした空き時間も、夢中になりたい時間も。オリジナルゲームを気軽に楽しめる場所、それが DOPAMINE SUPPLY。</p>
+          <div class="hero-eyebrow">＼ 暇つぶし？いや、沼る時間だ。 ／</div>
+          <h1><span class="hero-dopa">ﾄﾞﾊﾟﾄﾞﾊﾟ</span><br><span class="hero-main">遊びの供給、<br><em>とまらない。</em></span></h1>
+          <p class="hero-copy">ちょっと遊ぶつもりが、気づけばもう一回。オリジナルゲームが集まる、あなたの新しい遊び場。</p>
           <div class="actions">
             <a class="button button-primary" href="#games">ゲームを探す ↓</a>
-            <a class="button button-plain" href="#about">DOPAMINE SUPPLYとは</a>
+            <a class="button button-plain" href="#about">ここは何なんだ？</a>
           </div>
+          <div class="hero-micro">NO GAME, NO DOPA. <span>★</span> 今日もドパろう。</div>
         </div>
         <div class="hero-art" aria-label="ゲーム画面をイメージしたイラスト">
+          <span class="hero-sticker sticker-top">脳汁<br>供給中</span>
+          <span class="hero-sticker sticker-side">もう1回!!</span>
           <div class="arcade">
             <div class="arcade-label"><span>DOPAMINE SUPPLY</span><span>🎮</span></div>
-            <div class="screen"><div class="screen-ball"></div><div class="screen-paddle"></div></div>
+            <div class="screen"><div class="screen-ball"></div><div class="screen-paddle"></div><span class="screen-hit">+100</span></div>
+            <div class="arcade-bottom"><span>PLAY!</span><span>PLAY!</span><span>PLAY!</span></div>
           </div>
           <span class="art-caption">さあ、遊ぼう。</span>
+          <span class="hero-spark spark-one">✳</span><span class="hero-spark spark-two">★</span>
         </div>
       </div>
+      <div class="hero-ticker"><div>ﾄﾞﾊﾟﾄﾞﾊﾟﾄﾞﾊﾟ!!!!　★　遊べ！つくれ！もう一回！　★　DOPAMINE SUPPLY　★　ﾄﾞﾊﾟﾄﾞﾊﾟﾄﾞﾊﾟ!!!!　★　遊べ！つくれ！もう一回！　★　</div></div>
     </section>
 
     <section id="featured">
