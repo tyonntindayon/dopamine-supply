@@ -93,6 +93,31 @@
       -webkit-text-stroke:1px rgba(32,36,58,.2); text-shadow:3px 4px 0 rgba(32,36,58,.35);
       animation:dopa-scroll 15s linear infinite;
     }
+    /* DOPA COLOR FLOW: smooth, energetic color changes without rapid flashing */
+    .hero {
+      background-size: 150% 150%;
+      animation: dopa-bg-flow 9s ease-in-out infinite alternate;
+    }
+    .hero-dopa {
+      animation: dopa-title-pulse 3.2s ease-in-out infinite alternate;
+      transform-origin: 50% 60%;
+    }
+    .hero-ticker {
+      background-size: 300% 100%;
+      animation: dopa-ticker-flow 5s ease-in-out infinite alternate;
+    }
+    .hero-ticker div { animation: dopa-scroll 15s linear infinite, dopa-ticker-text 4s ease-in-out infinite alternate; }
+    .hero-art { animation: dopa-art-flow 6s ease-in-out infinite alternate; }
+    .screen-ball { animation: dopa-ball-glow 2.8s ease-in-out infinite alternate; }
+    @keyframes dopa-bg-flow { from { background-position: 0% 35%; } to { background-position: 100% 65%; } }
+    @keyframes dopa-title-pulse {
+      from { color:#f16b50; filter:hue-rotate(0deg); text-shadow:5px 6px 0 var(--ink); }
+      to { color:#ffcf45; filter:hue-rotate(95deg); text-shadow:7px 8px 0 var(--ink), 0 0 22px rgba(255,207,69,.35); }
+    }
+    @keyframes dopa-ticker-flow { from { background-position:0% 50%; } to { background-position:100% 50%; } }
+    @keyframes dopa-ticker-text { from { color:#fffefa; } to { color:#20243a; } }
+    @keyframes dopa-art-flow { from { background-color:#4658d9; } to { background-color:#ed6b9b; } }
+    @keyframes dopa-ball-glow { from { box-shadow:0 0 12px var(--lime); transform:scale(.9); } to { box-shadow:0 0 30px #ffcf45; transform:scale(1.18); } }
     @keyframes dopa-scroll { to { transform:translateX(-50%); } }
     .kicker { display:inline-flex; align-items:center; gap:9px; font-size:.82rem; font-weight:900; color:var(--blue); }
     .kicker:before { content:""; width:26px; height:3px; background:var(--coral); border-radius:9px; }
@@ -216,7 +241,11 @@
       .about { padding:22px; }
       .footer-top { flex-direction:column; }
     }
-    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .button:hover { transform:none; } .hero-ticker div { animation:none; } }
+    @media(prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      .button:hover { transform:none; }
+      .hero, .hero-dopa, .hero-ticker, .hero-ticker div, .hero-art, .screen-ball { animation:none !important; }
+    }
   </style>
 </head>
 <body>
