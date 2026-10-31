@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#090b10">
-<title>DOPAUP⇧ Prototype 0.5.1</title>
+<title>DOPAUP⇧ Prototype 0.6.0</title>
 <style>
 :root{color-scheme:dark;--acid:#d7ff35;--violet:#a855f7;--ink:#090b10;--panel:#151922;--line:#303744}
 *{box-sizing:border-box}
@@ -29,13 +29,13 @@ button{border:0;border-radius:4px;background:var(--acid);color:#11150a;font-weig
 </head>
 <body>
 <div id="wrap">
-<header><div class="brand"><div class="brandmark">↑</div><div><div class="logo">DOPAUP<span>⇧</span></div><div class="subbrand">DOPAMINE SUPPLY / VERTICAL ARCADE</div></div></div><div class="pill">TEST BUILD 05.1</div></header>
+<header><div class="brand"><div class="brandmark">↑</div><div><div class="logo">DOPAUP<span>⇧</span></div><div class="subbrand">DOPAMINE SUPPLY / VERTICAL ARCADE</div></div></div><div class="pill">TEST BUILD 06.0</div></header>
 <div id="hud"><div class="stat"><small>CURRENT FLOOR</small><strong id="floor">0<em>F</em></strong></div><div class="stat"><small>RUN RECORD</small><strong id="best">0<em>F</em></strong></div></div>
 <div id="gamebox">
 <canvas id="game" width="480" height="720" aria-label="DOPAUP game"></canvas>
 <div id="overlay"><div class="panel"><h1 id="ovtitle">DOPAUP<span style="color:#b8ff69">⇧</span></h1><p id="ovtext">自動で左右に走るキャラクターを、ジャンプさせて上へ導こう。壁に当たると向きが変わる。</p><button id="start">START</button></div></div>
 </div>
-<div id="hint">TAP / <kbd>SPACE</kbd> / <kbd>↑</kbd>　JUMP TO CLIMB<br>壁で反転 ・ 足場から落下するとRUN終了</div><div class="footerline"><span>DOPAUP⇧ // PROTOTYPE 0.5.1</span><span>CLIMB YOUR LIMIT.</span></div>
+<div id="hint">TAP / <kbd>SPACE</kbd> / <kbd>↑</kbd>　JUMP TO CLIMB<br>壁で反転 ・ 足場から落下するとRUN終了</div><div class="footerline"><span>DOPAUP⇧ // PROTOTYPE 0.6.0</span><span>CLIMB YOUR LIMIT.</span></div>
 </div>
 <script>
 (()=>{
@@ -53,13 +53,16 @@ function reset(){
  floorEl.textContent='0';bestEl.textContent='0';
 }
 function makeFloorWalls(platform,level){
- // Place each wall ON TOP OF the platform, not outside its footprint.
- // The wall's bottom edge rests on the platform surface and its width overlaps the floor.
+ // End walls are anchored to the actual left/right endpoints of THIS platform.
+ // They stand upward from the platform top; no fixed tower-side coordinates are used.
  const wallW=18;
  const hL=76+(level%3)*8,hR=76+((level+1)%3)*8;
+ const floorTop=platform.y;
+ const leftEnd=platform.x;
+ const rightEnd=platform.x+platform.w;
  return [
-  {x:platform.x,y:platform.y-hL,w:wallW,h:hL,side:'left',level},
-  {x:platform.x+platform.w-wallW,y:platform.y-hR,w:wallW,h:hR,side:'right',level}
+  {x:leftEnd,y:floorTop-hL,w:wallW,h:hL,side:'left',level},
+  {x:rightEnd-wallW,y:floorTop-hR,w:wallW,h:hR,side:'right',level}
  ];
 }
 function jump(){if(!running)return;if(player.onGround){player.vy=-10.8;player.onGround=false;}}
