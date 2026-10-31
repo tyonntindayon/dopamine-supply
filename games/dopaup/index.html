@@ -45,32 +45,24 @@ const floorEl=document.getElementById('floor'),bestEl=document.getElementById('b
 let running=false,player,platforms,cameraY,floor,best,frame,lastTime,nextLevel;
 const rand=(a,b)=>a+Math.random()*(b-a);
 function makeNextPlatform(previous){
- const w=rand(132,154),level=nextLevel++,minOverlap=76;
- // 前の足場と必ず横方向に重なる範囲を先に計算する
+ const level=nextLevel++;
+ const safe=level%5===0;
+ const w=safe?220:rand(132,154),minOverlap=safe?92:76;
  const minX=Math.max(LEFT+10,previous.x-w+minOverlap);
  const maxX=Math.min(RIGHT-10-w,previous.x+previous.w-minOverlap);
- const leftRange={min:LEFT+155,max:RIGHT-10-w,side:'left'};
- const rightRange={min:LEFT+10,max:RIGHT-155-w,side:'right'};
- const candidates=[leftRange,rightRange].map(r=>({...r,min:Math.max(r.min,minX),max:Math.min(r.max,maxX)})).filter(r=>r.min<=r.max);
- let x,wallSide;
- if(candidates.length){
-   const chosen=candidates[Math.floor(Math.random()*candidates.length)];
-   x=rand(chosen.min,chosen.max);wallSide=chosen.side;
- }else{
-   // 片側配置と重なりが両立しない端では、到達可能性を優先
-   x=rand(minX,maxX);
-   wallSide=(x+w/2< (LEFT+RIGHT)/2)?'right':'left';
- }
- return {x,y:previous.y-78-rand(0,4),w,h:14,base:false,level,wallSide};
+ const x=rand(minX,maxX);
+ // 5階ごとは壁のない広い安全地帯。それ以外は足場の切れ目側に壁を置く
+ const wallSide=safe?null:(Math.random()<.5?'left':'right');
+ return {x,y:previous.y-(safe?82:78)-rand(0,4),w,h:14,base:false,level,wallSide,safe};
 }
 function reset(){
  floor=0;best=0;cameraY=0;frame=0;nextLevel=1;
- player={x:110,y:590,vx:SPEED,vy:0,w:27,h:34,onGround:false,jumpBuffer:0,coyote:0};
+ player={x:110,y:590,vx:SPEED,vy:0,w:27,h:34,onGround:false,jumpBuffer:0,coyote:0,jumpsUsed:0};
  platforms=[{x:68,y:630,w:344,h:18,base:true,level:0}];
  for(let i=0;i<14;i++)platforms.push(makeNextPlatform(platforms[platforms.length-1]));
  floorEl.textContent='0';bestEl.textContent='0';
 }
-function jump(){if(running)player.jumpBuffer=10;}
+function jump(){if(running&&player.jumpsUsed<2)player.jumpBuffer=10;}
 function start(){reset();running=true;overlay.style.display='none';lastTime=performance.now();requestAnimationFrame(loop);}
 function end(){running=false;overlay.style.display='flex';ovtitle.textContent='GAME OVER';ovtext.textContent='到達階層：'+floor+'　/　今回の最高：'+best+'階。もう一度挑戦して記録を更新しよう。';startBtn.textContent='RETRY';}
 function addPlatforms(){
@@ -83,22 +75,30 @@ function update(){
  if(player.jumpBuffer>0)player.jumpBuffer--;
  if(player.coyote>0)player.coyote--;
  player.x+=player.vx;
- // 各階の片側だけに壁を置く。壁のない側は通り抜けられる。
- const wall=platforms.find(p=>!p.base&&player.y+player.h>p.y-82&&player.y<p.y+18);
- if(wall?.wallSide==='left'&&player.x<LEFT+22){player.x=LEFT+22;player.vx=SPEED;}
- if(wall?.wallSide==='right'&&player.x+player.w>RIGHT-22){player.x=RIGHT-22-player.w;player.vx=-SPEED;}
+ // 足場の切れ目側にだけ壁を置く。安全地帯には壁を置かない。
+ for(const p of platforms){
+  if(p.base||!p.wallSide)continue;
+  const wx=p.wallSide==='left'?p.x-16:p.x+p.w;
+  const touching=player.y+player.h>p.y-72&&player.y<p.y+14&&player.x+player.w>wx&&player.x<wx+16;
+  if(touching){
+   if(p.wallSide==='left'&&player.vx<0){player.x=wx+16;player.vx=SPEED;}
+   if(p.wallSide==='right'&&player.vx>0){player.x=wx-player.w;player.vx=-SPEED;}
+  }
+ }
  player.x=Math.max(-player.w+8,Math.min(W-8,player.x));
  const oldBottom=player.y+player.h;player.vy+=GRAVITY;player.y+=player.vy;player.onGround=false;
  if(player.vy>=0){
   for(const p of platforms){
    if(oldBottom<=p.y+3&&player.y+player.h>=p.y&&player.x+player.w>p.x&&player.x<p.x+p.w){
-    player.y=p.y-player.h;player.vy=0;player.onGround=true;player.coyote=8;
+    player.y=p.y-player.h;player.vy=0;player.onGround=true;player.coyote=8;player.jumpsUsed=0;
     if(!p.base&&p.level>floor){floor=p.level;best=Math.max(best,floor);floorEl.textContent=floor;bestEl.textContent=best;}
     break;
    }
   }
  }
- if(player.onGround&&player.jumpBuffer>0){player.vy=JUMP;player.onGround=false;player.coyote=0;player.jumpBuffer=0;}
+ if(player.jumpBuffer>0&&player.jumpsUsed<2){
+  player.vy=JUMP;player.onGround=false;player.coyote=0;player.jumpsUsed++;player.jumpBuffer=0;
+ }
  const target=player.y-H*.48;if(target<cameraY)cameraY+=(target-cameraY)*.14;
  addPlatforms();if(player.y-cameraY>H+75)end();
 }
@@ -115,7 +115,18 @@ function draw(){
  ctx.fillStyle='#080d1680';ctx.fillRect(0,0,LEFT,H);ctx.fillRect(RIGHT,0,W-RIGHT,H);
  ctx.save();ctx.translate(0,-cameraY);
  for(let y=Math.floor(cameraY/60)*60;y<cameraY+H+60;y+=60){ctx.strokeStyle='#d7ff350b';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(LEFT,y);ctx.lineTo(RIGHT,y);ctx.stroke();}
- for(const p of platforms){if(!p.base){const wx=p.wallSide==='left'?LEFT:RIGHT-18;ctx.fillStyle='#8793a8';ctx.fillRect(wx,p.y-82,18,100);ctx.fillStyle='#d7ff35';ctx.fillRect(wx,p.y-82,18,5);ctx.fillRect(wx,p.y+13,18,5);ctx.fillStyle='#ffffff66';ctx.fillRect(wx+(p.wallSide==='left'?14:0),p.y-82,4,100);ctx.fillStyle='#30394a';for(let wy=p.y-68;wy<p.y+10;wy+=18)ctx.fillRect(wx+3,wy,12,3);}ctx.fillStyle=p.base?'#69734a':'#414b5b';ctx.fillRect(p.x,p.y,p.w,p.h);ctx.fillStyle=p.base?'#d7ff35':'#a855f7';ctx.fillRect(p.x,p.y,p.w,4);if(!p.base){ctx.fillStyle='#ffffff18';ctx.fillRect(p.x+7,p.y+7,Math.max(0,p.w-14),2);}}
+ for(const p of platforms){
+  if(!p.base&&p.wallSide){
+   const wx=p.wallSide==='left'?p.x-16:p.x+p.w;
+   ctx.fillStyle='#8793a8';ctx.fillRect(wx,p.y-72,16,86);
+   ctx.fillStyle='#d7ff35';ctx.fillRect(wx,p.y-72,16,4);ctx.fillRect(wx,p.y+10,16,4);
+   ctx.fillStyle='#ffffff66';ctx.fillRect(wx+(p.wallSide==='left'?12:0),p.y-72,4,86);
+   ctx.fillStyle='#30394a';for(let wy=p.y-58;wy<p.y+5;wy+=18)ctx.fillRect(wx+3,wy,10,3);
+  }
+  ctx.fillStyle=p.base?'#69734a':p.safe?'#526b45':'#414b5b';ctx.fillRect(p.x,p.y,p.w,p.h);
+  ctx.fillStyle=p.base||p.safe?'#d7ff35':'#a855f7';ctx.fillRect(p.x,p.y,p.w,4);
+  if(!p.base){ctx.fillStyle='#ffffff18';ctx.fillRect(p.x+7,p.y+7,Math.max(0,p.w-14),2);}
+ }
  ctx.fillStyle='#0005';ctx.fillRect(player.x+3,player.y+player.h+3,player.w,5);
  ctx.fillStyle='#d7ff35';ctx.fillRect(player.x,player.y,player.w,player.h);
  ctx.fillStyle='#243016';ctx.fillRect(player.x+(player.vx>0?17:5),player.y+9,5,5);
