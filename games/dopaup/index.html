@@ -45,10 +45,23 @@ const floorEl=document.getElementById('floor'),bestEl=document.getElementById('b
 let running=false,player,platforms,cameraY,floor,best,frame,lastTime,nextLevel;
 const rand=(a,b)=>a+Math.random()*(b-a);
 function makeNextPlatform(previous){
- const w=rand(122,158),level=nextLevel++,wallSide=level%2===1?'left':'right';
- // 壁の反対側に足場を寄せ、左右交互に登るルートを作る
- const x=wallSide==='left'?rand(LEFT+155,RIGHT-10-w):rand(LEFT+10,RIGHT-155-w);
- return {x,y:previous.y-82-rand(0,5),w,h:14,base:false,level,wallSide};
+ const w=rand(132,154),level=nextLevel++,minOverlap=76;
+ // 前の足場と必ず横方向に重なる範囲を先に計算する
+ const minX=Math.max(LEFT+10,previous.x-w+minOverlap);
+ const maxX=Math.min(RIGHT-10-w,previous.x+previous.w-minOverlap);
+ const leftRange={min:LEFT+155,max:RIGHT-10-w,side:'left'};
+ const rightRange={min:LEFT+10,max:RIGHT-155-w,side:'right'};
+ const candidates=[leftRange,rightRange].map(r=>({...r,min:Math.max(r.min,minX),max:Math.min(r.max,maxX)})).filter(r=>r.min<=r.max);
+ let x,wallSide;
+ if(candidates.length){
+   const chosen=candidates[Math.floor(Math.random()*candidates.length)];
+   x=rand(chosen.min,chosen.max);wallSide=chosen.side;
+ }else{
+   // 片側配置と重なりが両立しない端では、到達可能性を優先
+   x=rand(minX,maxX);
+   wallSide=(x+w/2< (LEFT+RIGHT)/2)?'right':'left';
+ }
+ return {x,y:previous.y-78-rand(0,4),w,h:14,base:false,level,wallSide};
 }
 function reset(){
  floor=0;best=0;cameraY=0;frame=0;nextLevel=1;
