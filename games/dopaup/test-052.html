@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#090b10">
+<title>DOPAUP⇧ Prototype 0.5.2</title>
+<style>
+:root{color-scheme:dark;--acid:#d7ff35;--violet:#a855f7;--ink:#090b10;--panel:#151922;--line:#303744}
+*{box-sizing:border-box}
+body{margin:0;background:#090b10;color:#f4f5f7;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;justify-content:center;min-height:100vh}
+#wrap{width:min(100vw,520px);padding:17px 14px 22px;display:flex;flex-direction:column;gap:11px}
+header{display:flex;align-items:center;justify-content:space-between;padding:2px 2px 5px}
+.brand{display:flex;align-items:center;gap:10px}.brandmark{width:31px;height:31px;background:var(--acid);color:#10130b;display:grid;place-items:center;font-weight:1000;font-size:21px;transform:skew(-8deg);box-shadow:4px 4px 0 #7851b8}
+.logo{font-weight:1000;font-size:clamp(25px,7vw,35px);letter-spacing:-2px;line-height:1}.logo span{color:var(--acid)}
+.subbrand{font-size:8px;letter-spacing:2px;color:#9ca4b2;font-weight:800;margin-top:4px}
+.pill{font-size:9px;letter-spacing:1.5px;color:var(--acid);border:1px solid #56622b;background:#202719;border-radius:4px;padding:7px 9px;font-weight:900}
+#hud{display:grid;grid-template-columns:1.2fr 1fr;gap:8px}
+.stat{background:linear-gradient(135deg,#1b202a,#12161d);border:1px solid var(--line);border-left:3px solid var(--acid);padding:9px 13px;border-radius:5px;position:relative;overflow:hidden}.stat:last-child{border-left-color:var(--violet)}
+.stat small{display:block;color:#87909e;font-size:9px;letter-spacing:2px;font-weight:900}.stat strong{font-size:27px;line-height:1.2;font-weight:950;letter-spacing:-1px;font-variant-numeric:tabular-nums}.stat strong em{font-style:normal;color:var(--acid);font-size:12px;letter-spacing:1px;margin-left:4px}
+#gamebox{position:relative;border:1px solid #39404c;border-radius:7px;overflow:hidden;background:#11151d;box-shadow:0 18px 45px #0009}#gamebox:before{content:"";position:absolute;z-index:1;inset:0;pointer-events:none;border:1px solid #ffffff0b}
+canvas{display:block;width:100%;height:auto;touch-action:none}
+#overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#090b10d9,#171322e8);padding:24px;text-align:center;z-index:2}
+.panel{background:linear-gradient(145deg,#1d2330,#11151d);border:1px solid #59633a;border-radius:7px;padding:25px 19px 21px;max-width:310px;width:100%;box-shadow:8px 8px 0 #a855f733,0 18px 45px #0009;position:relative}.panel:before{content:"DOPAMINE SUPPLY / ARCADE UNIT 02";display:block;color:var(--acid);font-size:8px;letter-spacing:1.8px;font-weight:900;margin-bottom:13px}
+.panel h1{margin:0 0 8px;font-size:30px;letter-spacing:-1.5px;font-weight:1000}.panel p{color:#aeb6c3;font-size:12px;line-height:1.75;margin:10px 0 19px}
+button{border:0;border-radius:4px;background:var(--acid);color:#11150a;font-weight:1000;font-size:14px;letter-spacing:1.5px;padding:13px 25px;cursor:pointer;box-shadow:4px 4px 0 #a855f7;transition:transform .08s}button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #a855f7}
+#hint{font-size:10px;color:#87909e;text-align:center;line-height:1.9;letter-spacing:.3px}kbd{background:#202630;border:1px solid #414b5a;border-radius:3px;padding:2px 6px;color:var(--acid);font-weight:800}.footerline{display:flex;justify-content:space-between;color:#555e6b;font-size:8px;letter-spacing:1.5px;font-weight:900;padding:0 3px}
+</style>
+</head>
+<body>
+<div id="wrap">
+<header><div class="brand"><div class="brandmark">↑</div><div><div class="logo">DOPAUP<span>⇧</span></div><div class="subbrand">DOPAMINE SUPPLY / VERTICAL ARCADE</div></div></div><div class="pill">TEST BUILD 05.2</div></header>
+<div id="hud"><div class="stat"><small>CURRENT FLOOR</small><strong id="floor">0<em>F</em></strong></div><div class="stat"><small>RUN RECORD</small><strong id="best">0<em>F</em></strong></div></div>
+<div id="gamebox">
+<canvas id="game" width="480" height="720" aria-label="DOPAUP game"></canvas>
+<div id="overlay"><div class="panel"><h1 id="ovtitle">DOPAUP<span style="color:#b8ff69">⇧</span></h1><p id="ovtext">自動で左右に走るキャラクターを、ジャンプさせて上へ導こう。壁に当たると向きが変わる。</p><button id="start">START</button></div></div>
+</div>
+<div id="hint">TAP / <kbd>SPACE</kbd> / <kbd>↑</kbd>　JUMP TO CLIMB<br>壁で反転 ・ 足場から落下するとRUN終了</div><div class="footerline"><span>DOPAUP⇧ // PROTOTYPE 0.5.2</span><span>CLIMB YOUR LIMIT.</span></div>
+</div>
+<script>
+(()=>{
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+const W=480,H=720,floorEl=document.getElementById('floor'),bestEl=document.getElementById('best');
+const overlay=document.getElementById('overlay'),startBtn=document.getElementById('start'),ovtitle=document.getElementById('ovtitle'),ovtext=document.getElementById('ovtext');
+let running=false,player,platforms,walls,cameraY,floor,best,frame,lastTime;
+const rand=(a,b)=>a+Math.random()*(b-a);
+function reset(){
+ floor=0;best=0;cameraY=0;frame=0;
+ player={x:95,y:590,vx:2.5,vy:0,w:27,h:34,onGround:false};
+ platforms=[{x:68,y:630,w:344,h:18,base:true,level:0}];
+ walls=makeFloorWalls(platforms[0],0);
+ for(let i=1;i<14;i++){let x=rand(82,275),y=630-i*82;const p={x,y,w:rand(95,145),h:14,base:false,level:i};platforms.push(p);walls.push(...makeFloorWalls(p,i));}
+ floorEl.textContent='0';bestEl.textContent='0';
+}
+function makeFloorWalls(platform,level){
+ // Place each wall ON TOP OF the platform, not outside its footprint.
+ // The wall's bottom edge rests on the platform surface and its width overlaps the floor.
+ const wallW=18;
+ const hL=76+(level%3)*8,hR=76+((level+1)%3)*8;
+ return [
+  {x:platform.x,y:platform.y-hL,w:wallW,h:hL,side:'left',level},
+  {x:platform.x+platform.w-wallW,y:platform.y-hR,w:wallW,h:hR,side:'right',level}
+ ];
+}
+function jump(){if(!running)return;if(player.onGround){player.vy=-10.8;player.onGround=false;}}
+function start(){reset();running=true;overlay.style.display='none';lastTime=performance.now();requestAnimationFrame(loop);}
+function end(){running=false;overlay.style.display='flex';ovtitle.textContent='GAME OVER';ovtext.textContent=`到達階層：${floor}　/　今回の最高：${best}階。もう一度挑戦して記録を更新しよう。`;startBtn.textContent='RETRY';}
+function addPlatforms(){
+ let top=Math.min(...platforms.map(p=>p.y));
+ while(top>cameraY-900){
+  let y=top-75-rand(0,22),x=rand(82,275),w=rand(95,145),level=platforms.length;
+  platforms.push({x,y,w,h:14,base:false,level});
+  walls.push(...makeFloorWalls(platforms[platforms.length-1],level));
+  top=y;
+ }
+ platforms=platforms.filter(p=>p.y<cameraY+H+100);
+ walls=walls.filter(w=>w.y<cameraY+H+120);
+}
+function update(){
+ frame++;
+ const oldX=player.x;
+ player.x+=player.vx;
+ // Resolve only against the wall segments belonging to actual floors.
+ for(const wall of walls){
+  const verticalOverlap=player.y+player.h>wall.y && player.y<wall.y+wall.h;
+  if(!verticalOverlap)continue;
+  if(wall.side==='left' && player.vx<0 && player.x<wall.x+wall.w && player.x+player.w>wall.x){
+   player.x=wall.x+wall.w;player.vx=Math.abs(player.vx);
+  }
+  if(wall.side==='right' && player.vx>0 && player.x+player.w>wall.x && player.x<wall.x+wall.w){
+   player.x=wall.x-player.w;player.vx=-Math.abs(player.vx);
+  }
+ }
+ const oldBottom=player.y+player.h;player.vy+=0.42;player.y+=player.vy;player.onGround=false;
+ if(player.vy>=0){for(const p of platforms){if(oldBottom<=p.y+3&&player.y+player.h>=p.y&&player.x+player.w>p.x&&player.x<p.x+p.w){player.y=p.y-player.h;player.vy=0;player.onGround=true;if(!p.base&&p.level>floor){floor=p.level;best=Math.max(best,floor);floorEl.textContent=floor;bestEl.textContent=best;}}}}
+ const target=player.y-H*0.48;if(target<cameraY)cameraY+=(target-cameraY)*0.12;
+ addPlatforms();if(player.y-cameraY>H+70)end();
+}
+function draw(){
+ ctx.clearRect(0,0,W,H);
+ const altitude=Math.max(0,-cameraY),sky=ctx.createLinearGradient(0,0,0,H);
+ if(altitude<1500){sky.addColorStop(0,'#263b58');sky.addColorStop(.55,'#182638');sky.addColorStop(1,'#111923');}
+ else if(altitude<3600){sky.addColorStop(0,'#51416f');sky.addColorStop(.55,'#29334e');sky.addColorStop(1,'#172130');}
+ else{sky.addColorStop(0,'#17152e');sky.addColorStop(.55,'#242b50');sky.addColorStop(1,'#111827');}
+ ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ // City skyline outside the tower windows, moving at a slower parallax speed.
+ const parallax=(cameraY*.22)%260;
+ for(let layer=0;layer<2;layer++){
+  const baseY=H-35+parallax+layer*115;
+  for(let i=0;i<13;i++){
+   const bw=25+(i*17%31),bx=(i*43+layer*19)%W,bh=65+((i*71+layer*37)%155),by=baseY-bh;
+   ctx.fillStyle=layer===0?'#101b2c':'#1a2940';ctx.fillRect(bx,by,bw,bh);
+   ctx.fillStyle='#d7ff3530';for(let wy=by+10;wy<baseY-8;wy+=15)for(let wx=bx+6;wx<bx+bw-4;wx+=11)ctx.fillRect(wx,wy,4,5);
+  }
+ }
+ // Clouds appear as the player climbs above the city.
+ if(altitude>1200){const cloudShift=(cameraY*.38)%250;for(let i=0;i<7;i++){const x=(i*91+23)%W,y=((i*127+cloudShift)%850)-70;ctx.fillStyle=altitude>3600?'#c9d7ff20':'#d8e4f522';ctx.beginPath();ctx.ellipse(x,y,48,12,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(x+18,y-7,25,13,0,0,Math.PI*2);ctx.fill();}}
+ // Tower window frames.
+ ctx.fillStyle='#080d16a8';ctx.fillRect(0,0,31,H);ctx.fillRect(W-31,0,31,H);
+ ctx.fillStyle='#657084';ctx.fillRect(29,0,5,H);ctx.fillRect(W-34,0,5,H);
+ for(let y=0;y<H;y+=180){ctx.fillStyle='#a9b8ce55';ctx.fillRect(34,y,3,2);ctx.fillRect(W-37,y,3,2);}
+ // Floor-by-floor walls: visible blocks match the collision segments above.
+ ctx.save();ctx.translate(0,-cameraY);
+ for(const wall of walls){
+  ctx.fillStyle=wall.side==='left'?'#303746':'#202633';
+  ctx.fillRect(wall.x,wall.y,wall.w,wall.h);
+  ctx.fillStyle='#687487';ctx.fillRect(wall.side==='left'?wall.x:wall.x+wall.w-4,wall.y,4,wall.h);
+  ctx.fillStyle='#d7ff35';ctx.fillRect(wall.x,wall.y+wall.h-4,wall.w,3);
+  ctx.fillStyle='#a855f7';ctx.fillRect(wall.x,wall.y+wall.h-1,wall.w,2);
+ }
+ for(let y=Math.floor(cameraY/60)*60;y<cameraY+H+60;y+=60){ctx.strokeStyle='#d7ff350b';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(68,y);ctx.lineTo(W-68,y);ctx.stroke();}
+ for(const p of platforms){ctx.fillStyle=p.base?'#69734a':'#414b5b';ctx.fillRect(p.x,p.y,p.w,p.h);ctx.fillStyle=p.base?'#d7ff35':'#a855f7';ctx.fillRect(p.x,p.y,p.w,4);if(!p.base){ctx.fillStyle='#ffffff18';ctx.fillRect(p.x+7,p.y+7,Math.max(0,p.w-14),2);}}
+ ctx.fillStyle='#0005';ctx.fillRect(player.x+3,player.y+player.h+3,player.w,5);
+ ctx.fillStyle='#d7ff35';ctx.fillRect(player.x,player.y,player.w,player.h);
+ ctx.fillStyle='#243016';ctx.fillRect(player.x+(player.vx>0?17:5),player.y+9,5,5);
+ ctx.fillStyle='#eaffd2';ctx.fillRect(player.x+5,player.y+5,6,5);
+ ctx.fillStyle='#a855f7';ctx.fillRect(player.x+4,player.y+player.h-5,player.w-8,5);
+ ctx.restore();
+ ctx.fillStyle='#d7ff35';ctx.font='900 11px system-ui';ctx.fillText('↑  CLIMB HIGHER',18,27);
+ ctx.fillStyle='#dce4f0';ctx.font='800 9px system-ui';ctx.textAlign='right';
+ ctx.fillText(altitude<1500?'CITY LEVEL':altitude<3600?'ABOVE THE CLOUDS':'HIGH ALTITUDE',W-18,27);ctx.textAlign='left';
+}
+function loop(t){if(!running)return;const dt=Math.min((t-lastTime)/16.67,2);lastTime=t;for(let i=0;i<Math.max(1,Math.round(dt));i++)update();draw();if(running)requestAnimationFrame(loop);}
+canvas.addEventListener('pointerdown',e=>{e.preventDefault();jump();});
+window.addEventListener('keydown',e=>{if(['Space','ArrowUp','KeyW'].includes(e.code)){e.preventDefault();if(!running)start();else jump();}});
+startBtn.addEventListener('click',start);reset();draw();
+})();
+</script>
+</body>
+</html>
