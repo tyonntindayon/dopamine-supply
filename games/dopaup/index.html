@@ -72,8 +72,8 @@ function update(){
  player.x+=player.vx;
  // 各階の片側だけに壁を置く。壁のない側は通り抜けられる。
  const wall=platforms.find(p=>!p.base&&player.y+player.h>p.y-82&&player.y<p.y+18);
- if(wall?.wallSide==='left'&&player.x<LEFT+12){player.x=LEFT+12;player.vx=SPEED;}
- if(wall?.wallSide==='right'&&player.x+player.w>RIGHT-12){player.x=RIGHT-12-player.w;player.vx=-SPEED;}
+ if(wall?.wallSide==='left'&&player.x<LEFT+22){player.x=LEFT+22;player.vx=SPEED;}
+ if(wall?.wallSide==='right'&&player.x+player.w>RIGHT-22){player.x=RIGHT-22-player.w;player.vx=-SPEED;}
  player.x=Math.max(-player.w+8,Math.min(W-8,player.x));
  const oldBottom=player.y+player.h;player.vy+=GRAVITY;player.y+=player.vy;player.onGround=false;
  if(player.vy>=0){
@@ -102,7 +102,7 @@ function draw(){
  ctx.fillStyle='#080d1680';ctx.fillRect(0,0,LEFT,H);ctx.fillRect(RIGHT,0,W-RIGHT,H);
  ctx.save();ctx.translate(0,-cameraY);
  for(let y=Math.floor(cameraY/60)*60;y<cameraY+H+60;y+=60){ctx.strokeStyle='#d7ff350b';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(LEFT,y);ctx.lineTo(RIGHT,y);ctx.stroke();}
- for(const p of platforms){if(!p.base){const wx=p.wallSide==='left'?LEFT-2:RIGHT-10;ctx.fillStyle='#657084';ctx.fillRect(wx,p.y-82,12,100);ctx.fillStyle='#d7ff35';ctx.fillRect(wx,p.y-75,12,18);ctx.fillStyle='#ffffff55';ctx.fillRect(wx+(p.wallSide==='left'?9:0),p.y-82,3,100);}ctx.fillStyle=p.base?'#69734a':'#414b5b';ctx.fillRect(p.x,p.y,p.w,p.h);ctx.fillStyle=p.base?'#d7ff35':'#a855f7';ctx.fillRect(p.x,p.y,p.w,4);if(!p.base){ctx.fillStyle='#ffffff18';ctx.fillRect(p.x+7,p.y+7,Math.max(0,p.w-14),2);}}
+ for(const p of platforms){if(!p.base){const wx=p.wallSide==='left'?LEFT:RIGHT-18;ctx.fillStyle='#8793a8';ctx.fillRect(wx,p.y-82,18,100);ctx.fillStyle='#d7ff35';ctx.fillRect(wx,p.y-82,18,5);ctx.fillRect(wx,p.y+13,18,5);ctx.fillStyle='#ffffff66';ctx.fillRect(wx+(p.wallSide==='left'?14:0),p.y-82,4,100);ctx.fillStyle='#30394a';for(let wy=p.y-68;wy<p.y+10;wy+=18)ctx.fillRect(wx+3,wy,12,3);}ctx.fillStyle=p.base?'#69734a':'#414b5b';ctx.fillRect(p.x,p.y,p.w,p.h);ctx.fillStyle=p.base?'#d7ff35':'#a855f7';ctx.fillRect(p.x,p.y,p.w,4);if(!p.base){ctx.fillStyle='#ffffff18';ctx.fillRect(p.x+7,p.y+7,Math.max(0,p.w-14),2);}}
  ctx.fillStyle='#0005';ctx.fillRect(player.x+3,player.y+player.h+3,player.w,5);
  ctx.fillStyle='#d7ff35';ctx.fillRect(player.x,player.y,player.w,player.h);
  ctx.fillStyle='#243016';ctx.fillRect(player.x+(player.vx>0?17:5),player.y+9,5,5);
