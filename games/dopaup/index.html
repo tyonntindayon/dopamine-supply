@@ -42,21 +42,24 @@ button{border:0;border-radius:4px;background:var(--acid);color:#11150a;font-weig
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
 const W=480,H=720,LEFT=42,RIGHT=438,GRAVITY=.42,JUMP=-10.8,SPEED=2.55;
 const floorEl=document.getElementById('floor'),bestEl=document.getElementById('best'),overlay=document.getElementById('overlay'),startBtn=document.getElementById('start'),ovtitle=document.getElementById('ovtitle'),ovtext=document.getElementById('ovtext');
-let running=false,player,platforms,cameraY,floor,best,frame,lastTime,nextLevel;
+let running=false,player,platforms,cameraY,floor,best,frame,lastTime,nextLevel,lastWallSide;
 const rand=(a,b)=>a+Math.random()*(b-a);
 function makeNextPlatform(previous){
  const level=nextLevel++;
  const safe=level%5===0;
+ // 安全地帯の直前は通常ジャンプだけでは届かない高さにする
  const w=safe?220:rand(132,154),minOverlap=safe?92:76;
  const minX=Math.max(LEFT+10,previous.x-w+minOverlap);
  const maxX=Math.min(RIGHT-10-w,previous.x+previous.w-minOverlap);
  const x=rand(minX,maxX);
- // 5階ごとは壁のない広い安全地帯。それ以外は足場の切れ目側に壁を置く
- const wallSide=safe?null:(Math.random()<.5?'left':'right');
- return {x,y:previous.y-(safe?82:78)-rand(0,4),w,h:14,base:false,level,wallSide,safe};
+ // 壁あり足場は必ず左右交互。安全地帯は壁なしでダブルジャンプ区間の着地点にする
+ if(!safe)lastWallSide=lastWallSide==='left'?'right':'left';
+ const wallSide=safe?null:lastWallSide;
+ const rise=safe?158:78;
+ return {x,y:previous.y-rise-rand(0,3),w,h:14,base:false,level,wallSide,safe};
 }
 function reset(){
- floor=0;best=0;cameraY=0;frame=0;nextLevel=1;
+ floor=0;best=0;cameraY=0;frame=0;nextLevel=1;lastWallSide='right';
  player={x:110,y:590,vx:SPEED,vy:0,w:27,h:34,onGround:false,jumpBuffer:0,coyote:0,jumpsUsed:0};
  platforms=[{x:68,y:630,w:344,h:18,base:true,level:0}];
  for(let i=0;i<14;i++)platforms.push(makeNextPlatform(platforms[platforms.length-1]));
