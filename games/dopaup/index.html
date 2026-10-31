@@ -48,11 +48,7 @@ function reset(){
  floor=0;best=0;cameraY=0;frame=0;
  player={x:95,y:590,vx:2.5,vy:0,w:27,h:34,onGround:false};
  platforms=[{x:68,y:630,w:344,h:18,base:true,level:0}];
- walls=[];
- for(let i=0;i<14;i++){
-  const p=platforms[i]||{y:630-i*82};
-  walls.push(...makeFloorWalls(p.y,i));
- }
+ walls=makeFloorWalls(630,0);
  for(let i=1;i<14;i++){let x=rand(82,275),y=630-i*82;const p={x,y,w:rand(95,145),h:14,base:false,level:i};platforms.push(p);walls.push(...makeFloorWalls(y,i));}
  floorEl.textContent='0';bestEl.textContent='0';
 }
