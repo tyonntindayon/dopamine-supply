@@ -53,12 +53,13 @@ function reset(){
  floorEl.textContent='0';bestEl.textContent='0';
 }
 function makeFloorWalls(platform,level){
- // Each platform gets walls exactly at its own left and right edges.
- // The walls rise from the platform surface, so the runner turns around before leaving it.
- const hL=48+(level%3)*8,hR=56+((level+1)%3)*7;
+ // Vertical end-stops rise directly from the top surface at BOTH ends of this floor.
+ // Their bottom edges meet the floor exactly; the runner cannot pass the floor's edge.
+ const wallW=18;
+ const hL=76+(level%3)*8,hR=76+((level+1)%3)*8;
  return [
-  {x:platform.x-16,y:platform.y-hL,w:16,h:hL,side:'left',level},
-  {x:platform.x+platform.w,y:platform.y-hR,w:16,h:hR,side:'right',level}
+  {x:platform.x-wallW,y:platform.y-hL,w:wallW,h:hL,side:'left',level},
+  {x:platform.x+platform.w,y:platform.y-hR,w:wallW,h:hR,side:'right',level}
  ];
 }
 function jump(){if(!running)return;if(player.onGround){player.vy=-10.8;player.onGround=false;}}
@@ -83,10 +84,10 @@ function update(){
  for(const wall of walls){
   const verticalOverlap=player.y+player.h>wall.y && player.y<wall.y+wall.h;
   if(!verticalOverlap)continue;
-  if(wall.side==='left' && player.vx<0 && oldX>=wall.x+wall.w-1 && player.x<=wall.x+wall.w){
+  if(wall.side==='left' && player.vx<0 && player.x<wall.x+wall.w && player.x+player.w>wall.x){
    player.x=wall.x+wall.w;player.vx=Math.abs(player.vx);
   }
-  if(wall.side==='right' && player.vx>0 && oldX+player.w<=wall.x+1 && player.x+player.w>=wall.x){
+  if(wall.side==='right' && player.vx>0 && player.x+player.w>wall.x && player.x<wall.x+wall.w){
    player.x=wall.x-player.w;player.vx=-Math.abs(player.vx);
   }
  }
