@@ -45,11 +45,10 @@ const floorEl=document.getElementById('floor'),bestEl=document.getElementById('b
 let running=false,player,platforms,cameraY,floor,best,frame,lastTime,nextLevel;
 const rand=(a,b)=>a+Math.random()*(b-a);
 function makeNextPlatform(previous){
- const w=rand(122,158),minOverlap=54;
- const minX=Math.max(LEFT+10,previous.x-w+minOverlap);
- const maxX=Math.min(RIGHT-10-w,previous.x+previous.w-minOverlap);
- const x=minX<=maxX?rand(minX,maxX):Math.max(LEFT+10,Math.min(RIGHT-10-w,previous.x));
- return {x,y:previous.y-82-rand(0,5),w,h:14,base:false,level:nextLevel++};
+ const w=rand(122,158),level=nextLevel++,wallSide=level%2===1?'left':'right';
+ // 壁の反対側に足場を寄せ、左右交互に登るルートを作る
+ const x=wallSide==='left'?rand(LEFT+155,RIGHT-10-w):rand(LEFT+10,RIGHT-155-w);
+ return {x,y:previous.y-82-rand(0,5),w,h:14,base:false,level,wallSide};
 }
 function reset(){
  floor=0;best=0;cameraY=0;frame=0;nextLevel=1;
@@ -71,8 +70,11 @@ function update(){
  if(player.jumpBuffer>0)player.jumpBuffer--;
  if(player.coyote>0)player.coyote--;
  player.x+=player.vx;
- if(player.x<LEFT){player.x=LEFT;player.vx=SPEED;}
- if(player.x+player.w>RIGHT){player.x=RIGHT-player.w;player.vx=-SPEED;}
+ // 各階の片側だけに壁を置く。壁のない側は通り抜けられる。
+ const wall=platforms.find(p=>!p.base&&player.y+player.h>p.y-82&&player.y<p.y+18);
+ if(wall?.wallSide==='left'&&player.x<LEFT){player.x=LEFT;player.vx=SPEED;}
+ if(wall?.wallSide==='right'&&player.x+player.w>RIGHT){player.x=RIGHT-player.w;player.vx=-SPEED;}
+ player.x=Math.max(-player.w+8,Math.min(W-8,player.x));
  const oldBottom=player.y+player.h;player.vy+=GRAVITY;player.y+=player.vy;player.onGround=false;
  if(player.vy>=0){
   for(const p of platforms){
@@ -97,12 +99,10 @@ function draw(){
  const parallax=(cameraY*.22)%260;
  for(let layer=0;layer<2;layer++){const baseY=H-35+parallax+layer*115;for(let i=0;i<13;i++){const bw=25+(i*17%31),bx=(i*43+layer*19)%W,bh=65+((i*71+layer*37)%155),by=baseY-bh;ctx.fillStyle=layer===0?'#101b2c':'#1a2940';ctx.fillRect(bx,by,bw,bh);ctx.fillStyle='#d7ff3530';for(let wy=by+10;wy<baseY-8;wy+=15)for(let wx=bx+6;wx<bx+bw-4;wx+=11)ctx.fillRect(wx,wy,4,5);}}
  if(altitude>1200){const cloudShift=(cameraY*.38)%250;for(let i=0;i<7;i++){const x=(i*91+23)%W,y=((i*127+cloudShift)%850)-70;ctx.fillStyle=altitude>3600?'#c9d7ff20':'#d8e4f522';ctx.beginPath();ctx.ellipse(x,y,48,12,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(x+18,y-7,25,13,0,0,Math.PI*2);ctx.fill();}}
- ctx.fillStyle='#080d16c9';ctx.fillRect(0,0,LEFT,H);ctx.fillRect(RIGHT,0,W-RIGHT,H);
- ctx.fillStyle='#657084';ctx.fillRect(LEFT-3,0,4,H);ctx.fillRect(RIGHT-1,0,4,H);
- for(let y=-(cameraY%180);y<H;y+=180){ctx.fillStyle='#d7ff3555';ctx.fillRect(LEFT-3,y,4,18);ctx.fillRect(RIGHT-1,y,4,18);}
+ ctx.fillStyle='#080d1680';ctx.fillRect(0,0,LEFT,H);ctx.fillRect(RIGHT,0,W-RIGHT,H);
  ctx.save();ctx.translate(0,-cameraY);
  for(let y=Math.floor(cameraY/60)*60;y<cameraY+H+60;y+=60){ctx.strokeStyle='#d7ff350b';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(LEFT,y);ctx.lineTo(RIGHT,y);ctx.stroke();}
- for(const p of platforms){ctx.fillStyle=p.base?'#69734a':'#414b5b';ctx.fillRect(p.x,p.y,p.w,p.h);ctx.fillStyle=p.base?'#d7ff35':'#a855f7';ctx.fillRect(p.x,p.y,p.w,4);if(!p.base){ctx.fillStyle='#ffffff18';ctx.fillRect(p.x+7,p.y+7,Math.max(0,p.w-14),2);}}
+ for(const p of platforms){if(!p.base){const wx=p.wallSide==='left'?LEFT-3:RIGHT-1;ctx.fillStyle='#657084';ctx.fillRect(wx,p.y-82,4,100);ctx.fillStyle='#d7ff3555';ctx.fillRect(wx,p.y-75,4,18);}ctx.fillStyle=p.base?'#69734a':'#414b5b';ctx.fillRect(p.x,p.y,p.w,p.h);ctx.fillStyle=p.base?'#d7ff35':'#a855f7';ctx.fillRect(p.x,p.y,p.w,4);if(!p.base){ctx.fillStyle='#ffffff18';ctx.fillRect(p.x+7,p.y+7,Math.max(0,p.w-14),2);}}
  ctx.fillStyle='#0005';ctx.fillRect(player.x+3,player.y+player.h+3,player.w,5);
  ctx.fillStyle='#d7ff35';ctx.fillRect(player.x,player.y,player.w,player.h);
  ctx.fillStyle='#243016';ctx.fillRect(player.x+(player.vx>0?17:5),player.y+9,5,5);
