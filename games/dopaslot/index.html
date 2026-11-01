@@ -21,6 +21,28 @@ button{font:inherit}
 h1{margin:8px 0 2px;color:#ffe29a;font-size:clamp(38px,9vw,64px);letter-spacing:.08em;text-shadow:0 2px #8e4c12,0 4px #5a2d0d,0 0 24px #f2b83d88}
 .tag{margin:0 0 22px;color:#c6a66d;font:10px Arial,sans-serif;letter-spacing:.35em}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 auto 18px;max-width:440px}
+.fever-box{max-width:440px;margin:-5px auto 17px;padding:10px 13px;border:1px solid #8b55bd;border-radius:11px;background:linear-gradient(110deg,#160e27,#26113b);box-shadow:inset 0 0 15px #000,0 0 13px #9333ea55}
+.fever-top{display:flex;justify-content:space-between;gap:10px;color:#e9c9ff;font:700 10px Arial,sans-serif;letter-spacing:.16em}
+.fever-track{height:10px;margin-top:8px;border:1px solid #a879d2;border-radius:20px;background:#090611;overflow:hidden}
+.fever-fill{height:100%;width:0;background:linear-gradient(90deg,#22d3ee,#a855f7,#ff4fc8,#ffe66d);box-shadow:0 0 12px #e879f9;transition:width .35s ease}
+.pachi-panel{position:relative;margin:0 0 16px;padding:10px 13px 12px;border:1px solid #8e66b7;border-radius:14px;background:radial-gradient(ellipse at 50% 100%,#42205f,#120c20 70%);overflow:hidden;box-shadow:inset 0 0 20px #000,0 0 14px #9333ea55}
+.pachi-head{display:flex;justify-content:space-between;gap:8px;color:#d9b7ff;font:700 9px Arial,sans-serif;letter-spacing:.16em}
+.mode-label{color:#91f7ff}
+.pachi-board{height:82px;position:relative;margin-top:8px;border:1px solid #68418d;border-radius:9px;background:radial-gradient(ellipse at 50% 100%,#31134a,#0b0915 75%);overflow:hidden}
+.pin-grid{position:absolute;inset:9px 10% 18px;display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(3,1fr);place-items:center}
+.pin-grid i{width:5px;height:5px;border-radius:50%;background:#ffe79a;box-shadow:0 0 5px #fff,0 0 9px #e879f9}
+.gate{position:absolute;left:50%;bottom:5px;transform:translateX(-50%);padding:3px 18px;border:1px solid #ffe27a;border-radius:20px;color:#fff2b3;background:#6b2d88;font:900 9px Arial,sans-serif;letter-spacing:.2em;box-shadow:0 0 12px #e879f9}
+.yakumono{position:absolute;right:9px;top:8px;color:#fff09b;font-size:20px;text-shadow:0 0 8px #ffe66d,0 0 16px #f0abfc;opacity:.6;transform:scale(.8)}
+.pachi-ball{position:absolute;left:12%;top:-12px;color:#fff;font-size:15px;text-shadow:0 0 8px #67e8f9;opacity:0}
+.pachi-panel.pachi-hit .pachi-ball{opacity:1;animation:ballDrop .65s ease-in forwards}
+.pachi-panel.pachi-hit .yakumono{animation:yakumonoHit .65s ease-out}
+@keyframes ballDrop{0%{transform:translate(0,0) scale(.7)}45%{transform:translate(110px,34px) scale(1.15)}75%{transform:translate(190px,13px) scale(.9)}100%{transform:translate(260px,53px) scale(.5);opacity:0}}
+@keyframes yakumonoHit{0%,100%{transform:scale(.8) rotate(0)}35%{transform:scale(1.7) rotate(30deg);opacity:1;color:#fff}70%{transform:scale(1.2) rotate(-20deg);opacity:1}}
+.pachi-lamps{display:flex;justify-content:center;gap:7px;margin-top:8px}
+.pachi-lamps i{width:7px;height:7px;border-radius:50%;background:#40304d;box-shadow:inset 0 0 3px #000}
+.pachi-lamps i.on{background:#ffe66d;box-shadow:0 0 7px #fff,0 0 14px #ff4fc8}
+.pachi-panel.fever{border-color:#ff78e1;box-shadow:inset 0 0 20px #000,0 0 18px #ff4fc8,0 0 35px #8b5cf6}
+.pachi-panel.fever .gate{background:linear-gradient(90deg,#a21caf,#db2777,#7c3aed);box-shadow:0 0 18px #ff4fc8}
 .stat{padding:10px 12px;border:1px solid #8d682e;border-radius:10px;background:#100c08;text-align:center}
 .stat span{display:block;color:#a88b58;font:10px Arial,sans-serif;letter-spacing:.16em}
 .stat strong{display:block;margin-top:4px;color:#ffe29a;font:700 22px "Courier New",monospace}
@@ -41,6 +63,8 @@ h1{margin:8px 0 2px;color:#ffe29a;font-size:clamp(38px,9vw,64px);letter-spacing:
 @keyframes blur{0%{transform:translateY(-24px);filter:blur(2px)}100%{transform:translateY(24px);filter:blur(2px)}}
 @keyframes stop{0%{transform:scale(1.08);filter:brightness(1.8)}100%{transform:scale(1);filter:brightness(1)}}
 .reel.hit-flash{animation:hitFlash .38s ease-out}
+.reel.perfect{border-color:#fff;background:linear-gradient(110deg,#fff7ad,#fff,#ffc8f2);box-shadow:0 0 0 3px #fff,0 0 18px #ffe66d,0 0 35px #ff4fc8}
+.reel.perfect .symbol{text-shadow:0 0 12px #fff,0 0 20px #ec4899}
 @keyframes hitFlash{0%{box-shadow:0 0 0 5px #fff,0 0 30px 14px #67e8f9;filter:brightness(2)}100%{box-shadow:inset 0 0 14px #59421c66,0 0 10px #fff,0 0 20px #c084fc;filter:brightness(1)}}
 .payline{text-align:center;color:#c8a05a;font:10px Arial,sans-serif;letter-spacing:.2em;margin:10px 0 0}
 .message{min-height:58px;display:grid;place-items:center;text-align:center;color:#ffdf91;font:700 clamp(15px,4vw,20px) Arial,sans-serif;letter-spacing:.06em;text-shadow:0 0 12px #e8a82c77;padding:12px 0}
@@ -75,6 +99,18 @@ h1{margin:8px 0 2px;color:#ffe29a;font-size:clamp(38px,9vw,64px);letter-spacing:
     <div class="stats">
       <div class="stat"><span>POINTS</span><strong id="points">0</strong></div>
       <div class="stat"><span>BEST SCORE</span><strong id="best">0</strong></div>
+    </div>
+    <div class="fever-box">
+      <div class="fever-top"><span>FEVER CHARGE</span><span id="feverText">0 / 100</span></div>
+      <div class="fever-track"><div class="fever-fill" id="feverFill"></div></div>
+    </div>
+    <div class="pachi-panel" id="pachiPanel">
+      <div class="pachi-head"><span>★ DOPA PACHI STAGE</span><span class="mode-label" id="modeLabel">NORMAL MODE</span></div>
+      <div class="pachi-board">
+        <div class="pin-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="pachi-ball">●</div><div class="yakumono">✦</div><div class="gate">CHANCE GATE</div>
+      </div>
+      <div class="pachi-lamps" id="pachiLamps"><i></i><i></i><i></i><i></i><i></i></div>
     </div>
     <div class="lights"></div>
     <div class="reel-frame">
@@ -112,6 +148,21 @@ const spinButton=document.getElementById("spin");
 const jackpot=document.getElementById("jackpot");
 let points=0,best=Number(localStorage.getItem("dopaSlotBest")||0),busy=false;
 let reelTimers=[null,null,null],stopped=[true,true,true],result=["7","BAR","7"];
+let fever=0,feverSpins=0,perfectStops=0,spinStartedAt=0,roundWasFever=false;
+const feverFill=document.getElementById("feverFill"),feverText=document.getElementById("feverText");
+const modeLabel=document.getElementById("modeLabel"),pachiPanel=document.getElementById("pachiPanel");
+const pachiLamps=[...document.querySelectorAll("#pachiLamps i")];
+function updateFever(){
+ fever=Math.max(0,Math.min(100,fever));
+ feverFill.style.width=fever+"%";feverText.textContent=Math.round(fever)+" / 100";
+ modeLabel.textContent=feverSpins>0?"FEVER MODE ×"+feverSpins:"NORMAL MODE";
+ pachiPanel.classList.toggle("fever",feverSpins>0);
+ pachiLamps.forEach((lamp,i)=>lamp.classList.toggle("on",i<Math.ceil(fever/20)));
+}
+function pachiFlash(){
+ pachiPanel.classList.remove("pachi-hit");void pachiPanel.offsetWidth;pachiPanel.classList.add("pachi-hit");
+ setTimeout(()=>pachiPanel.classList.remove("pachi-hit"),700);
+}
 bestEl.textContent=best;
 function setSymbol(reel,value){reel.querySelector(".symbol").textContent=value}
 function randomSymbol(){return symbols[Math.floor(Math.random()*symbols.length)]}
@@ -122,36 +173,51 @@ function payout(result){
  else if(result.every(x=>x==="BAR")){gain=500;text="BAR BAR BAR!"}
  else if(result.every(x=>x===result[0])){gain=300;text="PERFECT TRIPLE!"}
  else if(result[0]===result[1]||result[1]===result[2]||result[0]===result[2]){gain=50;text="NICE PAIR!"}
+ const perfectBonus=perfectStops*25;
+ if(roundWasFever)gain*=2;
+ gain+=perfectBonus;
  points+=gain;
+ fever+=12+perfectStops*13+(gain>0?8:0);
  if(points>best){best=points;localStorage.setItem("dopaSlotBest",String(best))}
- update();
- message.textContent=gain?text+"  +"+gain+" POINTS":text;
- message.classList.toggle("win",gain>0);
- if(gain>=500){document.getElementById("jackpotPoints").textContent="+"+gain+" POINTS";jackpot.classList.add("show");setTimeout(()=>jackpot.classList.remove("show"),1500)}
+ update();updateFever();
+ message.textContent=(gain?text+"  +"+gain+" POINTS":text)+(perfectBonus?"  · PERFECT +"+perfectBonus:"");
+ message.classList.toggle("win",gain>0||perfectStops>0);
+ if(gain>0||perfectStops>0)pachiFlash();
+ if(gain>=500){document.getElementById("jackpotPoints").textContent="+"+gain+" POINTS";jackpot.classList.add("show");setTimeout(()=>jackpot.classList.remove("show"),1700)}
 }
 function finishIfReady(){
  if(!stopped.every(Boolean))return;
  busy=false;spinButton.disabled=false;
  payout(result);
+ if(roundWasFever){feverSpins=Math.max(0,feverSpins-1);if(feverSpins===0)message.textContent+="  · FEVER END";}
+ else if(fever>=100){fever=0;feverSpins=3;message.textContent="✦ FEVER MODE突入!! 3 SPINS ✦";pachiFlash()}
+ updateFever();
 }
 function stopReel(i){
  if(!busy||stopped[i])return;
  clearInterval(reelTimers[i]);reelTimers[i]=null;
  stopped[i]=true;
+ const phase=((performance.now()-spinStartedAt+i*210)%1000);
+ const distance=Math.min(Math.abs(phase-500),1000-Math.abs(phase-500));
+ const isPerfect=distance<105;
+ if(isPerfect){perfectStops++;reels[i].classList.add("perfect");}
+ else reels[i].classList.remove("perfect");
  reels[i].classList.remove("spinning");
  reels[i].classList.remove("stop");void reels[i].offsetWidth;reels[i].classList.add("stop");
  result[i]=reels[i].querySelector(".symbol").textContent;
  stopButtons[i].disabled=true;
- stopButtons[i].textContent="STOPPED";
+ stopButtons[i].textContent=isPerfect?"PERFECT!":"STOPPED";
  // Bright confirmation flash for each successful stop.
  reels[i].classList.add("hit-flash");
  setTimeout(()=>reels[i].classList.remove("hit-flash"),380);
+ if(isPerfect){message.textContent="✦ PERFECT STOP! +25 BONUS ✦";pachiFlash()}
+ else if(stopped.filter(x=>!x).length)message.textContent="GOOD! あと"+stopped.filter(x=>!x).length+"リール！";
  if(stopped.every(Boolean))finishIfReady();
- else message.textContent="GOOD! あと"+stopped.filter(x=>!x).length+"リール！";
 }
 function spin(){
  if(busy)return;
  busy=true;spinButton.disabled=true;spinButton.textContent="SPINNING";
+ spinStartedAt=performance.now();perfectStops=0;roundWasFever=feverSpins>0;
  message.classList.remove("win");message.textContent="3つのSTOPを押してリールを止めよう！";
  jackpot.classList.remove("show");
  stopped=[false,false,false];result=["","",""];
@@ -161,13 +227,14 @@ function spin(){
    stopButtons[i].disabled=false;
    stopButtons[i].textContent="STOP "+(i+1);
    setSymbol(reel,randomSymbol());
-   reelTimers[i]=setInterval(()=>setSymbol(reel,randomSymbol()),85+i*12);
+   const speeds=[72,103,137];
+   reelTimers[i]=setInterval(()=>setSymbol(reel,randomSymbol()),speeds[i]);
  });
 }
 stopButtons.forEach((button,i)=>button.addEventListener("click",()=>stopReel(i)));
 spinButton.addEventListener("click",spin);
 document.getElementById("reset").addEventListener("click",()=>{
- if(busy)return;points=0;update();message.classList.remove("win");message.textContent="SCORE RESET — READY?";
+ if(busy)return;points=0;fever=0;feverSpins=0;perfectStops=0;update();updateFever();message.classList.remove("win");message.textContent="SCORE RESET — READY?";
 });
 </script>
 </body>
