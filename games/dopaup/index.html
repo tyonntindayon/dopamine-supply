@@ -4,38 +4,38 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#090b10">
-<title>DOPAUP⇧ Prototype 0.6.8</title>
+<title>DOPAUP⇧ Prototype 0.7.0</title>
 <style>
-:root{color-scheme:dark;--acid:#d7ff35;--violet:#a855f7;--ink:#090b10;--panel:#151922;--line:#303744}
+:root{color-scheme:dark;--acid:#eaff35;--violet:#b64cff;--cyan:#36e8ff;--ink:#080711;--panel:#151225;--line:#42345d}
 *{box-sizing:border-box}
-body{margin:0;background:#090b10;color:#f4f5f7;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;justify-content:center;min-height:100vh}
-#wrap{width:min(100vw,520px);padding:17px 14px 22px;display:flex;flex-direction:column;gap:11px}
-header{display:flex;align-items:center;justify-content:space-between;padding:2px 2px 5px}
-.brand{display:flex;align-items:center;gap:10px}.brandmark{width:31px;height:31px;background:var(--acid);color:#10130b;display:grid;place-items:center;font-weight:1000;font-size:21px;transform:skew(-8deg);box-shadow:4px 4px 0 #7851b8}
-.logo{font-weight:1000;font-size:clamp(25px,7vw,35px);letter-spacing:-2px;line-height:1}.logo span{color:var(--acid)}
-.subbrand{font-size:8px;letter-spacing:2px;color:#9ca4b2;font-weight:800;margin-top:4px}
-.pill{font-size:9px;letter-spacing:1.5px;color:var(--acid);border:1px solid #56622b;background:#202719;border-radius:4px;padding:7px 9px;font-weight:900}
-#hud{display:grid;grid-template-columns:1.2fr 1fr;gap:8px}
-.stat{background:linear-gradient(135deg,#1b202a,#12161d);border:1px solid var(--line);border-left:3px solid var(--acid);padding:9px 13px;border-radius:5px;position:relative;overflow:hidden}.stat:last-child{border-left-color:var(--violet)}
-.stat small{display:block;color:#87909e;font-size:9px;letter-spacing:2px;font-weight:900}.stat strong{font-size:27px;line-height:1.2;font-weight:950;letter-spacing:-1px;font-variant-numeric:tabular-nums}.stat strong em{font-style:normal;color:var(--acid);font-size:12px;letter-spacing:1px;margin-left:4px}
-#gamebox{position:relative;border:1px solid #39404c;border-radius:7px;overflow:hidden;background:#11151d;box-shadow:0 18px 45px #0009}#gamebox:before{content:"";position:absolute;z-index:1;inset:0;pointer-events:none;border:1px solid #ffffff0b}
+body{margin:0;background:radial-gradient(ellipse at 50% 0%,#28204a 0%,#100e1d 42%,#07070d 100%);color:#fff;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;justify-content:center;min-height:100vh}
+#wrap{width:min(100vw,520px);padding:19px 14px 24px;display:flex;flex-direction:column;gap:12px}
+header{display:flex;align-items:center;justify-content:space-between;padding:2px 3px 7px}
+.brand{display:flex;align-items:center;gap:11px}.brandmark{width:38px;height:38px;background:linear-gradient(135deg,var(--acid),#8dff9c);color:#10130b;display:grid;place-items:center;font-weight:1000;font-size:27px;transform:skew(-9deg) rotate(-3deg);box-shadow:4px 4px 0 var(--violet),0 0 22px #d7ff3555}
+.logo{font-weight:1000;font-size:clamp(28px,7vw,38px);letter-spacing:-2.5px;line-height:.95;text-shadow:0 0 18px #b64cff55}.logo span{color:var(--acid)}
+.subbrand{font-size:8px;letter-spacing:2.2px;color:#a99dc7;font-weight:900;margin-top:6px}
+.pill{font-size:9px;letter-spacing:1.5px;color:var(--acid);border:1px solid #75642b;background:#292318;border-radius:3px;padding:8px 10px;font-weight:1000;box-shadow:0 0 15px #eaff3518;transform:rotate(2deg)}
+#hud{display:grid;grid-template-columns:1.2fr 1fr;gap:9px}
+.stat{background:linear-gradient(125deg,#29203e,#151323 72%);border:1px solid #57466f;border-left:4px solid var(--acid);padding:10px 14px;border-radius:5px;position:relative;overflow:hidden;box-shadow:4px 4px 0 #090711,0 0 18px #a855f722}.stat:after{content:"";position:absolute;width:75px;height:75px;right:-25px;top:-35px;border:1px solid #ffffff18;transform:rotate(45deg)}.stat:last-child{border-left-color:var(--cyan)}
+.stat small{display:block;color:#b5a9cc;font-size:9px;letter-spacing:2px;font-weight:1000}.stat strong{font-size:31px;line-height:1.25;font-weight:1000;letter-spacing:-1.5px;font-variant-numeric:tabular-nums;text-shadow:0 0 15px #eaff3533}.stat strong em{font-style:normal;color:var(--acid);font-size:12px;letter-spacing:1px;margin-left:4px}
+#gamebox{position:relative;border:2px solid #75608f;border-radius:8px;overflow:hidden;background:#11151d;box-shadow:0 0 0 3px #171124,0 0 28px #a855f744,0 18px 45px #000b}#gamebox:before{content:"";position:absolute;z-index:1;inset:0;pointer-events:none;border:1px solid #ffffff22;background:linear-gradient(180deg,#ffffff08,transparent 18%,transparent 82%,#0003)}
 canvas{display:block;width:100%;height:auto;touch-action:none}
-#overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#090b10d9,#171322e8);padding:24px;text-align:center;z-index:2}
-.panel{background:linear-gradient(145deg,#1d2330,#11151d);border:1px solid #59633a;border-radius:7px;padding:25px 19px 21px;max-width:310px;width:100%;box-shadow:8px 8px 0 #a855f733,0 18px 45px #0009;position:relative}.panel:before{content:"DOPAMINE SUPPLY / ARCADE UNIT 02";display:block;color:var(--acid);font-size:8px;letter-spacing:1.8px;font-weight:900;margin-bottom:13px}
-.panel h1{margin:0 0 8px;font-size:30px;letter-spacing:-1.5px;font-weight:1000}.panel p{color:#aeb6c3;font-size:12px;line-height:1.75;margin:10px 0 19px}
-button{border:0;border-radius:4px;background:var(--acid);color:#11150a;font-weight:1000;font-size:14px;letter-spacing:1.5px;padding:13px 25px;cursor:pointer;box-shadow:4px 4px 0 #a855f7;transition:transform .08s}button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #a855f7}
-#hint{font-size:10px;color:#87909e;text-align:center;line-height:1.9;letter-spacing:.3px}kbd{background:#202630;border:1px solid #414b5a;border-radius:3px;padding:2px 6px;color:var(--acid);font-weight:800}.footerline{display:flex;justify-content:space-between;color:#555e6b;font-size:8px;letter-spacing:1.5px;font-weight:900;padding:0 3px}
+#overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#080711d9,#211333e8);padding:24px;text-align:center;z-index:2}
+.panel{background:linear-gradient(145deg,#29203e,#100e1b);border:1px solid var(--acid);border-radius:8px;padding:27px 19px 23px;max-width:310px;width:100%;box-shadow:7px 7px 0 var(--violet),0 0 35px #b64cff55;position:relative}.panel:before{content:"✦ DOPAMINE SUPPLY / ARCADE UNIT 02 ✦";display:block;color:var(--acid);font-size:8px;letter-spacing:1.4px;font-weight:1000;margin-bottom:14px}
+.panel h1{margin:0 0 8px;font-size:34px;letter-spacing:-2px;font-weight:1000;text-shadow:0 0 18px #b64cff88}.panel p{color:#c2b8d2;font-size:12px;line-height:1.8;margin:10px 0 20px}
+button{border:0;border-radius:4px;background:linear-gradient(100deg,var(--acid),#b9ff74);color:#11150a;font-weight:1000;font-size:14px;letter-spacing:2px;padding:14px 29px;cursor:pointer;box-shadow:4px 4px 0 var(--violet),0 0 20px #eaff3544;transition:transform .08s}button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--violet)}
+#hint{font-size:10px;color:#b3a7c9;text-align:center;line-height:2;letter-spacing:.5px}kbd{background:#241d35;border:1px solid #675582;border-radius:3px;padding:2px 6px;color:var(--acid);font-weight:900}.footerline{display:flex;justify-content:space-between;color:#786d8b;font-size:8px;letter-spacing:1.5px;font-weight:1000;padding:0 3px}
 </style>
 </head>
 <body>
 <div id="wrap">
-<header><div class="brand"><div class="brandmark">↑</div><div><div class="logo">DOPAUP<span>⇧</span></div><div class="subbrand">DOPAMINE SUPPLY / VERTICAL ARCADE</div></div></div><div class="pill">TEST BUILD 06.8</div></header>
+<header><div class="brand"><div class="brandmark">↑</div><div><div class="logo">DOPAUP<span>⇧</span></div><div class="subbrand">DOPAMINE SUPPLY / VERTICAL ARCADE</div></div></div><div class="pill">TEST BUILD 07.0</div></header>
 <div id="hud"><div class="stat"><small>CURRENT FLOOR</small><strong id="floor">1<em>F</em></strong></div><div class="stat"><small>RUN RECORD</small><strong id="best">1<em>F</em></strong></div></div>
 <div id="gamebox">
 <canvas id="game" width="480" height="720" aria-label="DOPAUP game"></canvas>
 <div id="overlay"><div class="panel"><h1 id="ovtitle">DOPAUP<span style="color:#b8ff69">⇧</span></h1><p id="ovtext">自動で左右に走るキャラクターを、ジャンプさせて上へ導こう。壁に当たると向きが変わる。</p><button id="start">START</button></div></div>
 </div>
-<div id="hint">TAP / <kbd>SPACE</kbd> / <kbd>↑</kbd>　JUMP TO CLIMB<br>壁で反転 ・ 足場から落下するとRUN終了</div><div class="footerline"><span>DOPAUP⇧ // PROTOTYPE 0.6.8</span><span>CLIMB YOUR LIMIT.</span></div>
+<div id="hint">TAP / <kbd>SPACE</kbd> / <kbd>↑</kbd>　JUMP TO CLIMB<br>壁で反転 ・ 足場から落下するとRUN終了</div><div class="footerline"><span>DOPAUP⇧ // PROTOTYPE 0.7.0</span><span>CLIMB YOUR LIMIT.</span></div>
 </div>
 <script>
 (()=>{
@@ -111,14 +111,20 @@ function update(){
 }
 function draw(){
  ctx.clearRect(0,0,W,H);
- const altitude=Math.max(0,-cameraY),sky=ctx.createLinearGradient(0,0,0,H);
- if(altitude<1500){sky.addColorStop(0,'#263b58');sky.addColorStop(.55,'#182638');sky.addColorStop(1,'#111923');}
- else if(altitude<3600){sky.addColorStop(0,'#51416f');sky.addColorStop(.55,'#29334e');sky.addColorStop(1,'#172130');}
- else{sky.addColorStop(0,'#17152e');sky.addColorStop(.55,'#242b50');sky.addColorStop(1,'#111827');}
- ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
- const parallax=(cameraY*.22)%260;
- for(let layer=0;layer<2;layer++){const baseY=H-35+parallax+layer*115;for(let i=0;i<13;i++){const bw=25+(i*17%31),bx=(i*43+layer*19)%W,bh=65+((i*71+layer*37)%155),by=baseY-bh;ctx.fillStyle=layer===0?'#101b2c':'#1a2940';ctx.fillRect(bx,by,bw,bh);ctx.fillStyle='#d7ff3530';for(let wy=by+10;wy<baseY-8;wy+=15)for(let wx=bx+6;wx<bx+bw-4;wx+=11)ctx.fillRect(wx,wy,4,5);}}
- if(altitude>1200){const cloudShift=(cameraY*.38)%250;for(let i=0;i<7;i++){const x=(i*91+23)%W,y=((i*127+cloudShift)%850)-70;ctx.fillStyle=altitude>3600?'#c9d7ff20':'#d8e4f522';ctx.beginPath();ctx.ellipse(x,y,48,12,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(x+18,y-7,25,13,0,0,Math.PI*2);ctx.fill();}}
+ const zone=Math.floor((floor-1)/10),zoneNames=['NEON CITY','SUNSET DISTRICT','CLOUD NINE','CYBER SPACE','GLITCH ZONE'],zoneColors=[['#17294a','#253b58','#101827'],['#592b59','#a94f68','#30213f'],['#397c9c','#a8d8e8','#244d70'],['#111536','#303d78','#090d25'],['#35134e','#762d88','#130d2c']];
+ const palette=zoneColors[Math.min(zone,4)],sky=ctx.createLinearGradient(0,0,0,H);
+ sky.addColorStop(0,palette[0]);sky.addColorStop(.56,palette[1]);sky.addColorStop(1,palette[2]);ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ const drift=(cameraY*.2)%260;
+ if(zone===0||zone===1){
+  if(zone===1){ctx.fillStyle='#ffb56a55';ctx.beginPath();ctx.arc(365,145,66,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ffd49b';ctx.beginPath();ctx.arc(365,145,43,0,Math.PI*2);ctx.fill();}
+  for(let layer=0;layer<3;layer++){const baseY=H-25+drift+layer*95;for(let i=0;i<15;i++){const bw=20+(i*19%35),bx=(i*47+layer*23)%W,bh=55+((i*67+layer*41)%180),by=baseY-bh;ctx.fillStyle=zone===0?['#101b32','#182747','#203456'][layer]:['#291b3d','#43264e','#633052'][layer];ctx.fillRect(bx,by,bw,bh);ctx.fillStyle=zone===0?'#d7ff3545':'#ffc16b55';for(let wy=by+10;wy<baseY-7;wy+=14)for(let wx=bx+5;wx<bx+bw-3;wx+=10)ctx.fillRect(wx,wy,4,5);}}
+ }else if(zone===2){
+  const cloudShift=(cameraY*.32)%300;for(let i=0;i<12;i++){const x=(i*83+17)%W,y=((i*127+cloudShift)%850)-65;ctx.fillStyle=i%2?'#e8fbff35':'#ffffff55';ctx.beginPath();ctx.ellipse(x,y,58,17,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(x+23,y-10,34,18,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(x-24,y-5,29,14,0,0,Math.PI*2);ctx.fill();}
+ }else{
+  for(let i=0;i<95;i++){const x=(i*73+19)%W,y=(i*137+Math.floor(cameraY*.25))%H;ctx.fillStyle=i%5===0?'#eaff35':'#ffffff';ctx.globalAlpha=.25+(i%4)*.16;ctx.fillRect(x,y,i%5===0?3:2,i%5===0?3:2);}ctx.globalAlpha=1;
+  if(zone>=3){ctx.strokeStyle=zone===3?'#5ceaff33':'#ff5bfa44';ctx.lineWidth=2;for(let i=0;i<4;i++){ctx.beginPath();ctx.ellipse(240,350,95+i*48,25+i*19,Math.PI/5,0,Math.PI*2);ctx.stroke();}}
+ }
+ ctx.fillStyle='#08071180';ctx.fillRect(0,0,LEFT,H);ctx.fillRect(RIGHT,0,W-RIGHT,H);
  ctx.fillStyle='#080d1680';ctx.fillRect(0,0,LEFT,H);ctx.fillRect(RIGHT,0,W-RIGHT,H);
  ctx.save();ctx.translate(0,-cameraY);
  for(let y=Math.floor(cameraY/60)*60;y<cameraY+H+60;y+=60){ctx.strokeStyle='#d7ff350b';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(LEFT,y);ctx.lineTo(RIGHT,y);ctx.stroke();}
