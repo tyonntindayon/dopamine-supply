@@ -175,9 +175,9 @@ function draw(){
  ctx.fillStyle='#243016';ctx.fillRect(player.x+(player.vx>0?17:5),player.y+9,5,5);
  ctx.fillStyle='#eaffd2';ctx.fillRect(player.x+5,player.y+5,6,5);
  ctx.fillStyle='#a855f7';ctx.fillRect(player.x+4,player.y+player.h-5,player.w-8,5);
- for(const a of particles){ctx.globalAlpha=Math.max(0,a.life/a.max);ctx.fillStyle=a.color;ctx.shadowColor=a.color;ctx.shadowBlur=12;ctx.beginPath();ctx.arc(player.x+player.w/2+a.x,player.y+a.y-cameraY,a.size,0,Math.PI*2);ctx.fill();}
+ for(const a of particles){ctx.globalAlpha=Math.max(0,a.life/a.max);ctx.fillStyle=a.color;ctx.shadowColor=a.color;ctx.shadowBlur=12;ctx.beginPath();ctx.arc(player.x+player.w/2+a.x,player.y+a.y,a.size,0,Math.PI*2);ctx.fill();}
  ctx.shadowBlur=0;ctx.globalAlpha=1;
- for(const a of popups){ctx.globalAlpha=Math.min(1,a.life/12);ctx.fillStyle=a.color;ctx.shadowColor=a.color;ctx.shadowBlur=14;ctx.font='1000 17px system-ui';ctx.textAlign='center';ctx.fillText(a.text,player.x+player.w/2+a.x,player.y+a.y-cameraY);}
+ for(const a of popups){ctx.globalAlpha=Math.min(1,a.life/12);ctx.fillStyle=a.color;ctx.shadowColor=a.color;ctx.shadowBlur=14;ctx.font='1000 17px system-ui';ctx.textAlign='center';ctx.fillText(a.text,player.x+player.w/2+a.x,player.y+a.y);}
  ctx.shadowBlur=0;ctx.globalAlpha=1;ctx.textAlign='left';
  ctx.restore();
  ctx.fillStyle='#d7ff35';ctx.font='900 11px system-ui';ctx.fillText('↑  CLIMB HIGHER',18,27);
