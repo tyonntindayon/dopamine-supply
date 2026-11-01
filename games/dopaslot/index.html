@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#17120e">
+<title>DOPA SLOT | DOPAMINE SUPPLY</title>
+<style>
+:root{--gold:#f4c45e;--gold2:#a66d20;--red:#a91f28;--ink:#17120e;--cream:#fff0cb;--muted:#c6b58f}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--cream);font-family:Georgia,"Yu Mincho",serif;background:radial-gradient(ellipse at 50% 5%,#55402a 0,#21180f 42%,#100d0a 100%);display:flex;justify-content:center;padding:24px 14px 40px}
+button{font:inherit}
+.wrap{width:min(680px,100%)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;font:700 12px/1.4 Arial,sans-serif;letter-spacing:.18em;color:var(--gold)}
+.top a{color:var(--gold);text-decoration:none}
+.machine{position:relative;padding:clamp(18px,4vw,34px);border:4px solid #d9aa4c;border-radius:28px;background:linear-gradient(145deg,#3b2b1a,#17110c 45%,#302115);box-shadow:0 0 0 5px #4d351b,0 18px 55px #000b,inset 0 0 24px #000;overflow:hidden}
+.machine:before{content:"";position:absolute;inset:9px;border:1px solid #bd8b3b;border-radius:19px;pointer-events:none}
+.brand{text-align:center;position:relative}
+.brand small{display:block;color:#e9bb5b;font:700 11px Arial,sans-serif;letter-spacing:.35em}
+h1{margin:8px 0 2px;color:#ffe29a;font-size:clamp(38px,9vw,64px);letter-spacing:.08em;text-shadow:0 2px #8e4c12,0 4px #5a2d0d,0 0 24px #f2b83d88}
+.tag{margin:0 0 22px;color:#c6a66d;font:10px Arial,sans-serif;letter-spacing:.35em}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 auto 18px;max-width:440px}
+.stat{padding:10px 12px;border:1px solid #8d682e;border-radius:10px;background:#100c08;text-align:center}
+.stat span{display:block;color:#a88b58;font:10px Arial,sans-serif;letter-spacing:.16em}
+.stat strong{display:block;margin-top:4px;color:#ffe29a;font:700 22px "Courier New",monospace}
+.lights{height:9px;margin:0 4px 13px;border-radius:50%;background:repeating-linear-gradient(90deg,#ffdf80 0 8px,#9d1c22 8px 16px,#493014 16px 24px);box-shadow:0 0 14px #f4c45e99}
+.reel-frame{padding:12px;border:3px solid #b88738;border-radius:17px;background:linear-gradient(#120d08,#352313 50%,#100b07);box-shadow:inset 0 0 18px #000}
+.reels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.reel{height:clamp(104px,23vw,148px);display:grid;place-items:center;overflow:hidden;border:3px solid #e0bd75;border-radius:9px;background:linear-gradient(110deg,#c8b58d,#fff4d7 45%,#bda77c);color:#24170d;font:900 clamp(26px,7vw,43px) Arial,sans-serif;text-shadow:0 2px #fff9;box-shadow:inset 0 0 14px #59421c66,0 2px 5px #000;position:relative}
+.reel:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 43%,#fff8 50%,transparent 57%);pointer-events:none}
+.reel .symbol{position:relative;z-index:1}
+.reel.spinning .symbol{animation:blur .075s linear infinite}
+.reel.stop{animation:stop .28s ease-out}
+@keyframes blur{0%{transform:translateY(-24px);filter:blur(2px)}100%{transform:translateY(24px);filter:blur(2px)}}
+@keyframes stop{0%{transform:scale(1.08);filter:brightness(1.8)}100%{transform:scale(1);filter:brightness(1)}}
+.payline{text-align:center;color:#c8a05a;font:10px Arial,sans-serif;letter-spacing:.2em;margin:10px 0 0}
+.message{min-height:58px;display:grid;place-items:center;text-align:center;color:#ffdf91;font:700 clamp(15px,4vw,20px) Arial,sans-serif;letter-spacing:.06em;text-shadow:0 0 12px #e8a82c77;padding:12px 0}
+.message.win{color:#fff0a1;animation:wintext .55s ease-in-out infinite alternate}
+@keyframes wintext{to{transform:scale(1.06);text-shadow:0 0 8px #fff,0 0 24px #ffb72c}}
+.controls{display:grid;grid-template-columns:1fr;gap:10px}
+.spin{width:100%;min-height:66px;border:3px solid #ffe6a1;border-radius:13px;color:#301808;background:linear-gradient(#ffe69b,#d49a35 55%,#8f5118);box-shadow:0 6px 0 #542d0d,0 0 22px #d99b3d55;cursor:pointer;font:900 24px Arial,sans-serif;letter-spacing:.24em;text-shadow:0 1px #fff8;transition:transform .1s,filter .1s}
+.spin:active{transform:translateY(4px);box-shadow:0 2px 0 #542d0d}
+.spin:disabled{opacity:.55;cursor:wait;filter:grayscale(.4)}
+.subcontrols{display:flex;justify-content:center;gap:12px}
+.subcontrols button{border:1px solid #88652f;border-radius:8px;background:#1a120b;color:#d8bd83;padding:8px 14px;font:12px Arial,sans-serif;cursor:pointer}
+.rules{margin-top:23px;padding-top:17px;border-top:1px solid #705127;color:#c8b58e;font:12px/1.7 Arial,sans-serif}
+.rules b{color:#f4d58e}
+.rules h2{margin:0 0 8px;color:#f3ce7c;font:700 13px Arial,sans-serif;letter-spacing:.18em}
+.payout{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 14px;margin-top:9px}
+.payout div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dotted #765a30;padding:4px 0}
+.payout strong{color:#f5d48b}
+.footer{text-align:center;margin-top:19px;color:#90794f;font:10px Arial,sans-serif;letter-spacing:.2em}
+.jackpot{position:absolute;inset:0;display:grid;place-items:center;background:#140d0de8;z-index:5;opacity:0;pointer-events:none;transition:opacity .2s}
+.jackpot.show{opacity:1}
+.jackpot div{padding:20px;text-align:center;color:#ffe28a;font:900 clamp(30px,8vw,58px) Arial,sans-serif;text-shadow:0 0 18px #ffcf45;animation:pop .45s ease-out}
+.jackpot small{display:block;font-size:15px;letter-spacing:.2em}
+@keyframes pop{0%{transform:scale(.4) rotate(-8deg)}75%{transform:scale(1.12) rotate(2deg)}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><a href="/">← DOPAMINE SUPPLY</a><span>TGAMES ORIGINAL</span></div>
+  <main class="machine">
+    <div class="brand"><small>THE CLASSIC ARCADE</small><h1>DOPA SLOT</h1><p class="tag">SPIN THE REELS · FEEL THE RUSH</p></div>
+    <div class="stats">
+      <div class="stat"><span>POINTS</span><strong id="points">0</strong></div>
+      <div class="stat"><span>BEST SCORE</span><strong id="best">0</strong></div>
+    </div>
+    <div class="lights"></div>
+    <div class="reel-frame">
+      <div class="reels">
+        <div class="reel" id="reel0"><span class="symbol">7</span></div>
+        <div class="reel" id="reel1"><span class="symbol">BAR</span></div>
+        <div class="reel" id="reel2"><span class="symbol">7</span></div>
+      </div>
+      <div class="payline">— ★ — WINNING LINE — ★ —</div>
+    </div>
+    <div class="message" id="message" aria-live="polite">READY? PRESS SPIN!</div>
+    <div class="controls"><button class="spin" id="spin">SPIN</button><div class="subcontrols"><button id="reset">RESET SCORE</button></div></div>
+    <div class="rules">
+      <h2>★ PAYOUT TABLE</h2>
+      <div class="payout">
+        <div><span>7 · 7 · 7</span><strong>+1000</strong></div>
+        <div><span>BAR · BAR · BAR</span><strong>+500</strong></div>
+        <div><span>Other triple</span><strong>+300</strong></div>
+        <div><span>Any pair</span><strong>+50</strong></div>
+      </div>
+      <p>ポイントを集めてハイスコアを目指そう。ゲーム内ポイントのみを使用するアーケードゲームです。現金・賭け金・換金機能はありません。</p>
+    </div>
+    <div class="jackpot" id="jackpot"><div>JACKPOT!<small id="jackpotPoints">+1000 POINTS</small></div></div>
+  </main>
+  <div class="footer">DOPAMINE SUPPLY © 2026 · A TGAMES ORIGINAL</div>
+</div>
+<script>
+const symbols=["7","BAR","♦","🍒","LEMON"];
+const reels=[0,1,2].map(i=>document.getElementById("reel"+i));
+const pointsEl=document.getElementById("points");
+const bestEl=document.getElementById("best");
+const message=document.getElementById("message");
+const spinButton=document.getElementById("spin");
+const jackpot=document.getElementById("jackpot");
+let points=0,best=Number(localStorage.getItem("dopaSlotBest")||0),busy=false;
+bestEl.textContent=best;
+function setSymbol(reel,value){reel.querySelector(".symbol").textContent=value}
+function randomSymbol(){return symbols[Math.floor(Math.random()*symbols.length)]}
+function update(){pointsEl.textContent=points.toLocaleString();bestEl.textContent=best.toLocaleString()}
+function payout(result){
+ let gain=0,text="NO MATCH — TRY AGAIN!";
+ if(result.every(x=>x==="7")){gain=1000;text="★★★ JACKPOT! ★★★"}
+ else if(result.every(x=>x==="BAR")){gain=500;text="BAR BAR BAR!"}
+ else if(result.every(x=>x===result[0])){gain=300;text="PERFECT TRIPLE!"}
+ else if(result[0]===result[1]||result[1]===result[2]||result[0]===result[2]){gain=50;text="NICE PAIR!"}
+ points+=gain;
+ if(points>best){best=points;localStorage.setItem("dopaSlotBest",String(best))}
+ update();
+ message.textContent=gain?text+"  +"+gain+" POINTS":text;
+ message.classList.toggle("win",gain>0);
+ if(gain>=500){document.getElementById("jackpotPoints").textContent="+"+gain+" POINTS";jackpot.classList.add("show");setTimeout(()=>jackpot.classList.remove("show"),1250)}
+}
+function spin(){
+ if(busy)return;
+ busy=true;spinButton.disabled=true;message.classList.remove("win");message.textContent="REELS IN MOTION...";
+ jackpot.classList.remove("show");
+ const result=reels.map(randomSymbol);
+ reels.forEach((reel,i)=>{reel.classList.add("spinning");reel.classList.remove("stop")});
+ // Each reel cycles independently, then lands on its preselected result.
+ const durations=[1050,1650,2250];
+ const timers=reels.map((reel,i)=>setInterval(()=>setSymbol(reel,randomSymbol()),65+i*8));
+ durations.forEach((duration,i)=>setTimeout(()=>{
+   clearInterval(timers[i]);reels[i].classList.remove("spinning");setSymbol(reels[i],result[i]);
+   reels[i].classList.remove("stop");void reels[i].offsetWidth;reels[i].classList.add("stop");
+   if(i===2){payout(result);busy=false;spinButton.disabled=false}
+ },duration));
+}
+spinButton.addEventListener("click",spin);
+document.getElementById("reset").addEventListener("click",()=>{
+ if(busy)return;points=0;update();message.classList.remove("win");message.textContent="SCORE RESET — READY?";
+});
+</script>
+</body>
+</html>
