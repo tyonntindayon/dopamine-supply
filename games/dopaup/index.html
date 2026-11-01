@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#090b10">
-<title>DOPAUP⇧ Prototype 0.7.1</title>
+<title>DOPAUP⇧ Prototype 0.7.2</title>
 <style>
 :root{color-scheme:dark;--acid:#eaff35;--violet:#b64cff;--cyan:#36e8ff;--ink:#080711;--panel:#151225;--line:#42345d}
 *{box-sizing:border-box}
@@ -49,13 +49,21 @@ function makeNextPlatform(previous){
  // 1階と10階ごとは両側に壁。5階ごとの壁なし区間は10階を除く。
  const bothWalls=level===1||level%10===0;
  const noWall=!bothWalls&&level%5===0;
- const w=noWall?260:rand(160,184),minOverlap=noWall?150:112;
- const minX=Math.max(LEFT+10,previous.x-w+minOverlap);
- const maxX=Math.min(RIGHT-10-w,previous.x+previous.w-minOverlap);
- const x=rand(minX,maxX);
+ const w=noWall?260:200;
+ // 直前だけでなく2階層前とも十分に重なる位置に限定し、壁の挟み込みを防ぐ。
+ const recent=platforms.filter(p=>!p.base).slice(-2);
+ const requiredOverlap=138;
+ let minX=Math.max(LEFT+10,previous.x+requiredOverlap-w,previous.x-70);
+ let maxX=Math.min(RIGHT-10-w,previous.x+previous.w-requiredOverlap,previous.x+70);
+ if(recent.length>=2){
+  const twoBack=recent[0];
+  minX=Math.max(minX,twoBack.x+requiredOverlap-w);
+  maxX=Math.min(maxX,twoBack.x+twoBack.w-requiredOverlap);
+ }
+ // 通常は候補範囲から選択。範囲が狭い場合も直前の足場に寄せて安全側に配置。
+ const x=minX<=maxX?rand(minX,maxX):Math.max(LEFT+10,Math.min(RIGHT-10-w,previous.x+(previous.w-w)/2));
  // 両壁・壁なし階は左右交互の順番に影響させず、片側壁だけ交互に切り替える。
  const wallSide=bothWalls?'both':noWall?null:(lastWallSide=lastWallSide==='left'?'right':'left');
- // 壁なし区間も通常の1回ジャンプで越えられる高さにする
  const rise=76;
  return {x,y:previous.y-rise-rand(0,3),w,h:14,base:false,level,wallSide,safe:noWall};
 }
