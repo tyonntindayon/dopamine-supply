@@ -13,7 +13,8 @@ button{font:inherit}
 .wrap{width:min(680px,100%)}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;font:700 12px/1.4 Arial,sans-serif;letter-spacing:.18em;color:var(--gold)}
 .top a{color:var(--gold);text-decoration:none}
-.machine{position:relative;padding:clamp(18px,4vw,34px);border:4px solid #d9aa4c;border-radius:28px;background:linear-gradient(145deg,#3b2b1a,#17110c 45%,#302115);box-shadow:0 0 0 5px #4d351b,0 18px 55px #000b,inset 0 0 24px #000;overflow:hidden}
+.machine{position:relative;padding:clamp(18px,4vw,34px);border:4px solid #ffe27a;border-radius:28px;background:linear-gradient(145deg,#30204c,#100d20 45%,#3b152c);box-shadow:0 0 0 5px #583c91,0 0 18px #a855f7,0 0 42px #e879f9aa,0 18px 55px #000b,inset 0 0 30px #000;overflow:hidden;animation:machineGlow 2.8s ease-in-out infinite alternate}
+@keyframes machineGlow{to{box-shadow:0 0 0 5px #583c91,0 0 28px #a855f7,0 0 65px #e879f9cc,0 18px 55px #000b,inset 0 0 30px #000}}
 .machine:before{content:"";position:absolute;inset:9px;border:1px solid #bd8b3b;border-radius:19px;pointer-events:none}
 .brand{text-align:center;position:relative}
 .brand small{display:block;color:#e9bb5b;font:700 11px Arial,sans-serif;letter-spacing:.35em}
@@ -23,16 +24,24 @@ h1{margin:8px 0 2px;color:#ffe29a;font-size:clamp(38px,9vw,64px);letter-spacing:
 .stat{padding:10px 12px;border:1px solid #8d682e;border-radius:10px;background:#100c08;text-align:center}
 .stat span{display:block;color:#a88b58;font:10px Arial,sans-serif;letter-spacing:.16em}
 .stat strong{display:block;margin-top:4px;color:#ffe29a;font:700 22px "Courier New",monospace}
-.lights{height:9px;margin:0 4px 13px;border-radius:50%;background:repeating-linear-gradient(90deg,#ffdf80 0 8px,#9d1c22 8px 16px,#493014 16px 24px);box-shadow:0 0 14px #f4c45e99}
-.reel-frame{padding:12px;border:3px solid #b88738;border-radius:17px;background:linear-gradient(#120d08,#352313 50%,#100b07);box-shadow:inset 0 0 18px #000}
+.lights{height:13px;margin:0 4px 16px;border-radius:50%;background:repeating-linear-gradient(90deg,#fff7a8 0 8px,#ff3e88 8px 16px,#6b5cff 16px 24px,#31eaff 24px 32px);background-size:64px 100%;box-shadow:0 0 10px #fff,0 0 22px #e879f9,0 0 38px #38bdf8;animation:lightRun .7s linear infinite}
+@keyframes lightRun{to{background-position:64px 0}}
+.reel-frame{padding:12px;border:3px solid #f7d66b;border-radius:17px;background:linear-gradient(#100b20,#25113a 50%,#100b20);box-shadow:inset 0 0 18px #000,0 0 16px #c084fc,0 0 30px #7c3aed88}
 .reels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-.reel{height:clamp(104px,23vw,148px);display:grid;place-items:center;overflow:hidden;border:3px solid #e0bd75;border-radius:9px;background:linear-gradient(110deg,#c8b58d,#fff4d7 45%,#bda77c);color:#24170d;font:900 clamp(26px,7vw,43px) Arial,sans-serif;text-shadow:0 2px #fff9;box-shadow:inset 0 0 14px #59421c66,0 2px 5px #000;position:relative}
+.reel-column{min-width:0;text-align:center}
+.stop-button{width:100%;margin-top:10px;min-height:46px;border:2px solid #a5f3fc;border-radius:9px;background:linear-gradient(#155e75,#0e7490);color:#ecfeff;font:900 15px Arial,sans-serif;letter-spacing:.12em;box-shadow:0 0 10px #22d3ee,0 0 22px #06b6d4;cursor:pointer;touch-action:manipulation}
+.stop-button:disabled{opacity:.32;filter:grayscale(1);cursor:not-allowed;box-shadow:none}
+.stop-button:not(:disabled){animation:stopPulse .65s ease-in-out infinite alternate}
+@keyframes stopPulse{to{filter:brightness(1.6);box-shadow:0 0 16px #67e8f9,0 0 32px #06b6d4}}
+.reel{height:clamp(104px,23vw,148px);display:grid;place-items:center;overflow:hidden;border:3px solid #fff1a6;border-radius:9px;background:linear-gradient(110deg,#d7c6ff,#fff 45%,#b8eaff);color:#24133e;font:900 clamp(26px,7vw,43px) Arial,sans-serif;text-shadow:0 2px #fff9;box-shadow:inset 0 0 14px #59421c66,0 0 10px #fff,0 0 20px #c084fc;position:relative}
 .reel:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 43%,#fff8 50%,transparent 57%);pointer-events:none}
 .reel .symbol{position:relative;z-index:1}
 .reel.spinning .symbol{animation:blur .075s linear infinite}
 .reel.stop{animation:stop .28s ease-out}
 @keyframes blur{0%{transform:translateY(-24px);filter:blur(2px)}100%{transform:translateY(24px);filter:blur(2px)}}
 @keyframes stop{0%{transform:scale(1.08);filter:brightness(1.8)}100%{transform:scale(1);filter:brightness(1)}}
+.reel.hit-flash{animation:hitFlash .38s ease-out}
+@keyframes hitFlash{0%{box-shadow:0 0 0 5px #fff,0 0 30px 14px #67e8f9;filter:brightness(2)}100%{box-shadow:inset 0 0 14px #59421c66,0 0 10px #fff,0 0 20px #c084fc;filter:brightness(1)}}
 .payline{text-align:center;color:#c8a05a;font:10px Arial,sans-serif;letter-spacing:.2em;margin:10px 0 0}
 .message{min-height:58px;display:grid;place-items:center;text-align:center;color:#ffdf91;font:700 clamp(15px,4vw,20px) Arial,sans-serif;letter-spacing:.06em;text-shadow:0 0 12px #e8a82c77;padding:12px 0}
 .message.win{color:#fff0a1;animation:wintext .55s ease-in-out infinite alternate}
@@ -70,13 +79,13 @@ h1{margin:8px 0 2px;color:#ffe29a;font-size:clamp(38px,9vw,64px);letter-spacing:
     <div class="lights"></div>
     <div class="reel-frame">
       <div class="reels">
-        <div class="reel" id="reel0"><span class="symbol">7</span></div>
-        <div class="reel" id="reel1"><span class="symbol">BAR</span></div>
-        <div class="reel" id="reel2"><span class="symbol">7</span></div>
+        <div class="reel-column"><div class="reel" id="reel0"><span class="symbol">7</span></div><button class="stop-button" id="stop0" disabled>STOP 1</button></div>
+        <div class="reel-column"><div class="reel" id="reel1"><span class="symbol">BAR</span></div><button class="stop-button" id="stop1" disabled>STOP 2</button></div>
+        <div class="reel-column"><div class="reel" id="reel2"><span class="symbol">7</span></div><button class="stop-button" id="stop2" disabled>STOP 3</button></div>
       </div>
       <div class="payline">— ★ — WINNING LINE — ★ —</div>
     </div>
-    <div class="message" id="message" aria-live="polite">READY? PRESS SPIN!</div>
+    <div class="message" id="message" aria-live="polite">SPINして、好きなタイミングでSTOP！</div>
     <div class="controls"><button class="spin" id="spin">SPIN</button><div class="subcontrols"><button id="reset">RESET SCORE</button></div></div>
     <div class="rules">
       <h2>★ PAYOUT TABLE</h2>
@@ -95,12 +104,14 @@ h1{margin:8px 0 2px;color:#ffe29a;font-size:clamp(38px,9vw,64px);letter-spacing:
 <script>
 const symbols=["7","BAR","♦","🍒","LEMON"];
 const reels=[0,1,2].map(i=>document.getElementById("reel"+i));
+const stopButtons=[0,1,2].map(i=>document.getElementById("stop"+i));
 const pointsEl=document.getElementById("points");
 const bestEl=document.getElementById("best");
 const message=document.getElementById("message");
 const spinButton=document.getElementById("spin");
 const jackpot=document.getElementById("jackpot");
 let points=0,best=Number(localStorage.getItem("dopaSlotBest")||0),busy=false;
+let reelTimers=[null,null,null],stopped=[true,true,true],result=["7","BAR","7"];
 bestEl.textContent=best;
 function setSymbol(reel,value){reel.querySelector(".symbol").textContent=value}
 function randomSymbol(){return symbols[Math.floor(Math.random()*symbols.length)]}
@@ -116,23 +127,44 @@ function payout(result){
  update();
  message.textContent=gain?text+"  +"+gain+" POINTS":text;
  message.classList.toggle("win",gain>0);
- if(gain>=500){document.getElementById("jackpotPoints").textContent="+"+gain+" POINTS";jackpot.classList.add("show");setTimeout(()=>jackpot.classList.remove("show"),1250)}
+ if(gain>=500){document.getElementById("jackpotPoints").textContent="+"+gain+" POINTS";jackpot.classList.add("show");setTimeout(()=>jackpot.classList.remove("show"),1500)}
+}
+function finishIfReady(){
+ if(!stopped.every(Boolean))return;
+ busy=false;spinButton.disabled=false;
+ payout(result);
+}
+function stopReel(i){
+ if(!busy||stopped[i])return;
+ clearInterval(reelTimers[i]);reelTimers[i]=null;
+ stopped[i]=true;
+ reels[i].classList.remove("spinning");
+ reels[i].classList.remove("stop");void reels[i].offsetWidth;reels[i].classList.add("stop");
+ result[i]=reels[i].querySelector(".symbol").textContent;
+ stopButtons[i].disabled=true;
+ stopButtons[i].textContent="STOPPED";
+ // Bright confirmation flash for each successful stop.
+ reels[i].classList.add("hit-flash");
+ setTimeout(()=>reels[i].classList.remove("hit-flash"),380);
+ if(stopped.every(Boolean))finishIfReady();
+ else message.textContent="GOOD! あと"+stopped.filter(x=>!x).length+"リール！";
 }
 function spin(){
  if(busy)return;
- busy=true;spinButton.disabled=true;message.classList.remove("win");message.textContent="REELS IN MOTION...";
+ busy=true;spinButton.disabled=true;spinButton.textContent="SPINNING";
+ message.classList.remove("win");message.textContent="3つのSTOPを押してリールを止めよう！";
  jackpot.classList.remove("show");
- const result=reels.map(randomSymbol);
- reels.forEach((reel,i)=>{reel.classList.add("spinning");reel.classList.remove("stop")});
- // Each reel cycles independently, then lands on its preselected result.
- const durations=[1050,1650,2250];
- const timers=reels.map((reel,i)=>setInterval(()=>setSymbol(reel,randomSymbol()),65+i*8));
- durations.forEach((duration,i)=>setTimeout(()=>{
-   clearInterval(timers[i]);reels[i].classList.remove("spinning");setSymbol(reels[i],result[i]);
-   reels[i].classList.remove("stop");void reels[i].offsetWidth;reels[i].classList.add("stop");
-   if(i===2){payout(result);busy=false;spinButton.disabled=false}
- },duration));
+ stopped=[false,false,false];result=["","",""];
+ reels.forEach((reel,i)=>{
+   reel.classList.remove("stop","hit-flash");
+   reel.classList.add("spinning");
+   stopButtons[i].disabled=false;
+   stopButtons[i].textContent="STOP "+(i+1);
+   setSymbol(reel,randomSymbol());
+   reelTimers[i]=setInterval(()=>setSymbol(reel,randomSymbol()),85+i*12);
+ });
 }
+stopButtons.forEach((button,i)=>button.addEventListener("click",()=>stopReel(i)));
 spinButton.addEventListener("click",spin);
 document.getElementById("reset").addEventListener("click",()=>{
  if(busy)return;points=0;update();message.classList.remove("win");message.textContent="SCORE RESET — READY?";
