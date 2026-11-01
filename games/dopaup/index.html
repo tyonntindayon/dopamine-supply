@@ -18,7 +18,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:2px
 #hud{display:grid;grid-template-columns:1.2fr 1fr;gap:9px}
 .stat{background:linear-gradient(125deg,#29203e,#151323 72%);border:1px solid #57466f;border-left:4px solid var(--acid);padding:10px 14px;border-radius:5px;position:relative;overflow:hidden;box-shadow:4px 4px 0 #090711,0 0 18px #a855f722}.stat:after{content:"";position:absolute;width:75px;height:75px;right:-25px;top:-35px;border:1px solid #ffffff18;transform:rotate(45deg)}.stat:last-child{border-left-color:var(--cyan)}
 .stat small{display:block;color:#b5a9cc;font-size:9px;letter-spacing:2px;font-weight:1000}.stat strong{font-size:31px;line-height:1.25;font-weight:1000;letter-spacing:-1.5px;font-variant-numeric:tabular-nums;text-shadow:0 0 15px #eaff3533}.stat strong em{font-style:normal;color:var(--acid);font-size:12px;letter-spacing:1px;margin-left:4px}
-#gamebox{position:relative;border:2px solid #75608f;border-radius:8px;overflow:hidden;background:#11151d;box-shadow:0 0 0 3px #171124,0 0 28px #a855f744,0 18px 45px #000b}#gamebox:before{content:"";position:absolute;z-index:1;inset:0;pointer-events:none;border:1px solid #ffffff22;background:linear-gradient(180deg,#ffffff08,transparent 18%,transparent 82%,#0003)}
+#gamebox{touch-action:none;position:relative;border:2px solid #75608f;border-radius:8px;overflow:hidden;background:#11151d;box-shadow:0 0 0 3px #171124,0 0 28px #a855f744,0 18px 45px #000b}#gamebox:before{content:"";position:absolute;z-index:1;inset:0;pointer-events:none;border:1px solid #ffffff22;background:linear-gradient(180deg,#ffffff08,transparent 18%,transparent 82%,#0003)}
 canvas{display:block;width:100%;height:auto;touch-action:none;user-select:none;-webkit-user-select:none}
 #overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#080711d9,#211333e8);padding:24px;text-align:center;z-index:2}
 .panel{background:linear-gradient(145deg,#29203e,#100e1b);border:1px solid var(--acid);border-radius:8px;padding:27px 19px 23px;max-width:310px;width:100%;box-shadow:7px 7px 0 var(--violet),0 0 35px #b64cff55;position:relative}.panel:before{content:"✦ DOPAMINE SUPPLY / ARCADE UNIT 02 ✦";display:block;color:var(--acid);font-size:8px;letter-spacing:1.4px;font-weight:1000;margin-bottom:14px}
@@ -174,6 +174,10 @@ function loop(t){
  }
 }
 canvas.addEventListener('pointerdown',e=>{e.preventDefault();jump();});
+// iOS Safariなどでのダブルタップ拡大をtouchstart段階で防ぐ
+canvas.addEventListener('touchstart',e=>{e.preventDefault();jump();},{passive:false});
+canvas.addEventListener('touchmove',e=>{e.preventDefault();},{passive:false});
+canvas.addEventListener('contextmenu',e=>e.preventDefault());
 // モバイルブラウザのダブルタップ・ピンチによるページ拡大を抑止
  document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
  document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
