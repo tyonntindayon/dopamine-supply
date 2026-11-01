@@ -24,7 +24,8 @@ canvas{display:block;width:100%;height:auto;touch-action:none;user-select:none;-
 .panel{background:linear-gradient(145deg,#29203e,#100e1b);border:1px solid var(--acid);border-radius:8px;padding:27px 19px 23px;max-width:310px;width:100%;box-shadow:7px 7px 0 var(--violet),0 0 35px #b64cff55;position:relative}.panel:before{content:"✦ DOPAMINE SUPPLY / ARCADE UNIT 02 ✦";display:block;color:var(--acid);font-size:8px;letter-spacing:1.4px;font-weight:1000;margin-bottom:14px}
 .panel h1{margin:0 0 8px;font-size:34px;letter-spacing:-2px;font-weight:1000;text-shadow:0 0 18px #b64cff88}.panel p{color:#c2b8d2;font-size:12px;line-height:1.8;margin:10px 0 20px}
 button{border:0;border-radius:4px;background:linear-gradient(100deg,var(--acid),#b9ff74);color:#11150a;font-weight:1000;font-size:14px;letter-spacing:2px;padding:14px 29px;cursor:pointer;box-shadow:4px 4px 0 var(--violet),0 0 20px #eaff3544;transition:transform .08s}button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--violet)}
-#hint{font-size:10px;color:#b3a7c9;text-align:center;line-height:2;letter-spacing:.5px}kbd{background:#241d35;border:1px solid #675582;border-radius:3px;padding:2px 6px;color:var(--acid);font-weight:900}.footerline{display:flex;justify-content:space-between;color:#786d8b;font-size:8px;letter-spacing:1.5px;font-weight:1000;padding:0 3px}
+#hint{font-size:10px;color:#b3a7c9;text-align:center;line-height:2;letter-spacing:.5px}
+#characterPicker{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:0 0 16px}.charChoice{padding:8px 3px 7px;background:#171326;color:#cfc5df;border:1px solid #57466f;border-radius:5px;box-shadow:none;letter-spacing:0;font-size:9px;line-height:1.4;display:flex;flex-direction:column;align-items:center;gap:5px}.charChoice.active{border:2px solid var(--acid);background:#30283d;color:#fff;box-shadow:0 0 14px #eaff3544}.charPreview{width:30px;height:38px;image-rendering:pixelated;display:block}.charName{font-weight:1000;letter-spacing:.4px}.panel p{margin-bottom:13px}kbd{background:#241d35;border:1px solid #675582;border-radius:3px;padding:2px 6px;color:var(--acid);font-weight:900}.footerline{display:flex;justify-content:space-between;color:#786d8b;font-size:8px;letter-spacing:1.5px;font-weight:1000;padding:0 3px}
 </style>
 </head>
 <body>
@@ -33,7 +34,7 @@ button{border:0;border-radius:4px;background:linear-gradient(100deg,var(--acid),
 <div id="hud"><div class="stat"><small>CURRENT FLOOR</small><strong id="floor">1<em>F</em></strong></div><div class="stat"><small>RUN RECORD</small><strong id="best">1<em>F</em></strong></div><div class="stat" id="comboStat"><small>COMBO</small><strong id="combo">0<em>×</em></strong></div><button id="soundToggle" type="button">SOUND: OFF</button></div>
 <div id="gamebox">
 <canvas id="game" width="480" height="720" aria-label="DOPAUP game"></canvas>
-<div id="overlay"><div class="panel"><h1 id="ovtitle">DOPAUP<span style="color:#b8ff69">⇧</span></h1><p id="ovtext">自動で左右に走るキャラクターを、ジャンプさせて上へ導こう。壁に当たると向きが変わる。</p><button id="start">START</button></div></div>
+<div id="overlay"><div class="panel"><h1 id="ovtitle">DOPAUP<span style="color:#b8ff69">⇧</span></h1><p id="ovtext">キャラクターを選んで、上を目指そう！</p><div id="characterPicker" aria-label="キャラクター選択"><button class="charChoice" data-char="0"><canvas class="charPreview" width="30" height="38"></canvas><span class="charName">LIME RUNNER</span></button><button class="charChoice" data-char="1"><canvas class="charPreview" width="30" height="38"></canvas><span class="charName">PURPLE POP</span></button><button class="charChoice" data-char="2"><canvas class="charPreview" width="30" height="38"></canvas><span class="charName">CYBER BLUE</span></button></div><button id="start">START</button></div></div>
 </div>
 <div id="hint">TAP / <kbd>SPACE</kbd> / <kbd>↑</kbd>　JUMP TO CLIMB<br>壁で反転 ・ 足場から落下するとRUN終了</div><div class="footerline"><span>DOPAUP⇧ // PROTOTYPE 0.8.0</span><span>CLIMB YOUR LIMIT.</span></div>
 </div>
@@ -44,6 +45,8 @@ const W=480,H=720,LEFT=42,RIGHT=438,GRAVITY=.40,JUMP=-8.0,SPEED=3.15;
 const floorEl=document.getElementById('floor'),bestEl=document.getElementById('best'),comboEl=document.getElementById('combo'),soundBtn=document.getElementById('soundToggle'),overlay=document.getElementById('overlay'),startBtn=document.getElementById('start'),ovtitle=document.getElementById('ovtitle'),ovtext=document.getElementById('ovtext');
 let running=false,player,platforms,cameraY,floor,best,frame,lastTime,nextLevel,lastWallSide;
 let combo=0,particles=[],popups=[],soundMuted=true,audioCtx=null;
+const characters=[{name:'LIME RUNNER',hair:'#26351b',skin:'#ffd2a1',top:'#d7ff35',trim:'#a855f7',pants:'#28334a'},{name:'PURPLE POP',hair:'#40205f',skin:'#f4bd9a',top:'#b64cff',trim:'#eaff35',pants:'#282044'},{name:'CYBER BLUE',hair:'#172d50',skin:'#e8c5a5',top:'#36e8ff',trim:'#ffffff',pants:'#1d3550'}];
+let selectedCharacter=0;try{selectedCharacter=Math.max(0,Math.min(2,Number(localStorage.getItem('dopaup_character'))||0));}catch(e){}
 try{soundMuted=localStorage.getItem('dopaup_muted')!=='false';}catch(e){}
 try{best=Math.max(1,Number(localStorage.getItem('dopaup_best'))||1);}catch(e){best=1;}
 function playTone(freq=440,duration=.08,type='sine',volume=.045){if(soundMuted)return;try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;if(!audioCtx)audioCtx=new AC();if(audioCtx.state==='suspended')audioCtx.resume();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.setValueAtTime(freq,audioCtx.currentTime);g.gain.setValueAtTime(volume,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+duration);}catch(e){}}
@@ -79,6 +82,13 @@ function reset(){
  for(let i=0;i<14;i++)platforms.push(makeNextPlatform(platforms[platforms.length-1]));
  floorEl.textContent='1';bestEl.textContent='1';
 }
+function drawCharacter(target,x,y,type,anim=0){const ch=characters[type]||characters[0],u=3;target.save();target.translate(Math.round(x),Math.round(y));target.imageSmoothingEnabled=false;const px=(a,b,w,h,color)=>{target.fillStyle=color;target.fillRect(a*u,b*u,w*u,h*u);};
+ // 9x11 pixel-art chibi runner: hair, face, hoodie, hands and sneakers
+ px(2,0,5,2,ch.hair);px(1,1,2,2,ch.hair);px(6,1,2,2,ch.hair);px(2,2,5,3,ch.skin);px(1,2,1,2,ch.hair);px(7,2,1,2,ch.hair);
+ px(3,3,1,1,'#242033');px(6,3,1,1,'#242033');px(4,4,2,1,'#ffffff');px(2,5,5,1,ch.top);px(1,6,7,3,ch.top);px(0,6,2,2,ch.skin);px(7,6,2,2,ch.skin);px(3,6,3,1,ch.trim);px(2,9,2,1,ch.pants);px(5,9,2,1,ch.pants);px(1,10,3,1,ch.trim);px(5,10,3,1,ch.trim);
+ // subtle alternating foot pixels
+ if(Math.floor(anim/8)%2){px(1,10,3,1,ch.pants);px(5,10,3,1,ch.trim);}target.restore();}
+function renderCharacterPicker(){document.querySelectorAll('.charChoice').forEach((button,index)=>{button.classList.toggle('active',index===selectedCharacter);const c=button.querySelector('canvas').getContext('2d');c.clearRect(0,0,30,38);drawCharacter(c,1,2,index,frame||0);});}
 function jump(){if(running&&player.jumpsUsed<1){player.jumpBuffer=10;playTone(520,.055,'triangle',.025);}}
 function start(){reset();running=true;overlay.style.display='none';lastTime=performance.now();requestAnimationFrame(loop);}
 function end(){running=false;try{localStorage.setItem('dopaup_best',String(best));}catch(e){}overlay.style.display='flex';ovtitle.textContent='GAME OVER';ovtext.textContent='到達階層：'+floor+'　/　今回の最高：'+best+'階。もう一度挑戦して記録を更新しよう。';startBtn.textContent='RETRY';}
@@ -171,10 +181,7 @@ function draw(){
   if(!p.base){ctx.fillStyle='#ffffff18';ctx.fillRect(p.x+7,p.y+7,Math.max(0,p.w-14),2);}
  }
  ctx.fillStyle='#0005';ctx.fillRect(player.x+3,player.y+player.h+3,player.w,5);
- ctx.fillStyle='#d7ff35';ctx.fillRect(player.x,player.y,player.w,player.h);
- ctx.fillStyle='#243016';ctx.fillRect(player.x+(player.vx>0?17:5),player.y+9,5,5);
- ctx.fillStyle='#eaffd2';ctx.fillRect(player.x+5,player.y+5,6,5);
- ctx.fillStyle='#a855f7';ctx.fillRect(player.x+4,player.y+player.h-5,player.w-8,5);
+ drawCharacter(ctx,player.x,player.y,selectedCharacter,frame);
  for(const a of particles){ctx.globalAlpha=Math.max(0,a.life/a.max);ctx.fillStyle=a.color;ctx.shadowColor=a.color;ctx.shadowBlur=12;ctx.beginPath();ctx.arc(player.x+player.w/2+a.x,player.y+a.y,a.size,0,Math.PI*2);ctx.fill();}
  ctx.shadowBlur=0;ctx.globalAlpha=1;
  for(const a of popups){ctx.globalAlpha=Math.min(1,a.life/12);ctx.fillStyle=a.color;ctx.shadowColor=a.color;ctx.shadowBlur=14;ctx.font='1000 17px system-ui';ctx.textAlign='center';ctx.fillText(a.text,player.x+player.w/2+a.x,player.y+a.y);}
@@ -209,7 +216,7 @@ canvas.addEventListener('contextmenu',e=>e.preventDefault());
  document.addEventListener('gestureend',e=>e.preventDefault(),{passive:false});
 window.addEventListener('keydown',e=>{if(['Space','ArrowUp','KeyW'].includes(e.code)){e.preventDefault();if(!running)start();else jump();}});
 soundBtn.addEventListener('click',()=>{soundMuted=!soundMuted;try{localStorage.setItem('dopaup_muted',String(soundMuted));}catch(e){}syncSoundButton();if(!soundMuted)playTone(740,.1,'sine');});
-syncSoundButton();startBtn.addEventListener('click',start);reset();bestEl.textContent=best;draw();
+syncSoundButton();document.querySelectorAll('.charChoice').forEach(button=>button.addEventListener('click',()=>{if(running)return;selectedCharacter=Number(button.dataset.char);try{localStorage.setItem('dopaup_character',String(selectedCharacter));}catch(e){}renderCharacterPicker();}));startBtn.addEventListener('click',start);renderCharacterPicker();reset();bestEl.textContent=best;draw();
 })();
 </script>
 </body>
