@@ -404,6 +404,16 @@
       body:before, .hero, .hero:before, .hero:after, .hero-dopa, .hero-ticker, .hero-ticker div, .hero-art, .arcade, .arcade-label span:first-child, .screen-ball, .hero-sticker, .hero-spark { animation:none !important; }
     }
   
+
+    .feedback-box{padding:28px;border:3px solid #ffcf45;border-radius:24px;background:rgba(32,36,58,.94);box-shadow:0 0 0 5px rgba(241,107,80,.8),0 12px 32px rgba(0,0,0,.28)}
+    .feedback-box h2{margin:0 0 8px;color:#ffcf45;font-size:clamp(1.8rem,4vw,2.5rem)}
+    .feedback-box p{margin:0 0 16px;color:#e1e1ee}
+    .feedback-box textarea{display:block;width:100%;min-height:130px;padding:14px;border:2px solid #ffcf45;border-radius:12px;background:#171a2c;color:#fff;font:inherit;resize:vertical}
+    .feedback-box textarea:focus{outline:3px solid #ed4f91;outline-offset:2px}
+    .feedback-actions{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:14px}
+    .feedback-note{font-size:.78rem;color:#c9cada}
+    .feedback-box .button{border:0;cursor:pointer}
+
     /* NEON GLOW ON EVERY WORD */
     body :where(h1,h2,h3,h4,p,a,button,span,b,strong,small,em,li,label) {
       text-shadow:
@@ -488,6 +498,7 @@
         <a href="#home">ホーム</a>
         <a href="#featured">おすすめ</a>
         <a href="#games">ゲーム一覧</a>
+        <a href="#feedback">意見箱</a>
         <a href="#about">このサイトについて</a>
         <a class="nav-play" href="/games/dopaball/">遊んでみる ↗</a>
       </nav>
@@ -586,6 +597,24 @@
       </div>
     </section>
 
+
+    <section id="feedback">
+      <div class="wrap">
+        <div class="feedback-box">
+          <h2>意見箱 / FEEDBACK</h2>
+          <p>ゲームの感想、改善してほしいところ、新しいゲームのアイデアなどを送ってください。</p>
+          <form id="feedbackForm">
+            <label for="feedbackMessage" class="feedback-note">メッセージ</label>
+            <textarea id="feedbackMessage" maxlength="2000" required placeholder="例：DOPA SLOTにこんな演出がほしい！"></textarea>
+            <div class="feedback-actions">
+              <span class="feedback-note">送信するとGitHubの投稿画面が開きます。内容を確認して投稿してください。</span>
+              <button class="button button-primary" type="submit">意見を送る ↗</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
     <section id="about">
       <div class="wrap about">
         <div>
@@ -603,5 +632,17 @@
       <div class="dopa-joke"><span>君はまごうことなきDOPAGAKIだ⭐️</span><strong>ﾄﾞﾊﾟﾄﾞﾊﾟﾄﾞﾊﾟﾄﾞﾊﾟ!!!!</strong></div>
     </div>
   </footer>
+
+  <script>
+    document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const message = document.getElementById('feedbackMessage').value.trim();
+      if (!message) return;
+      const title = encodeURIComponent('DOPAMINE SUPPLYへの意見・感想');
+      const body = encodeURIComponent('## 意見・感想\n\n' + message + '\n\n---\nDOPAMINE SUPPLY 意見箱から送信');
+      window.open('https://github.com/tyonntindayon/dopamine-supply/issues/new?title=' + title + '&body=' + body, '_blank', 'noopener');
+    });
+  </script>
+
 </body>
 </html>
