@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#090b10">
-<title>DOPAUP⇧ Prototype 0.8.0</title>
+<title>DOPAUP⇧ Prototype 0.8.1</title>
 <style>
 :root{color-scheme:dark;--acid:#eaff35;--violet:#b64cff;--cyan:#36e8ff;--ink:#080711;--panel:#151225;--line:#42345d}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
@@ -30,13 +30,13 @@ button{border:0;border-radius:4px;background:linear-gradient(100deg,var(--acid),
 </head>
 <body>
 <div id="wrap">
-<header><div class="brand"><div class="brandmark">↑</div><div><div class="logo">DOPAUP<span>⇧</span></div><div class="subbrand">DOPAMINE SUPPLY / VERTICAL ARCADE</div></div></div><div class="pill">TEST BUILD 08.0</div></header>
+<header><div class="brand"><div class="brandmark">↑</div><div><div class="logo">DOPAUP<span>⇧</span></div><div class="subbrand">DOPAMINE SUPPLY / VERTICAL ARCADE</div></div></div><div class="pill">TEST BUILD 08.1</div></header>
 <div id="hud"><div class="stat"><small>CURRENT FLOOR</small><strong id="floor">1<em>F</em></strong></div><div class="stat"><small>RUN RECORD</small><strong id="best">1<em>F</em></strong></div><div class="stat" id="comboStat"><small>COMBO</small><strong id="combo">0<em>×</em></strong></div><button id="soundToggle" type="button">SOUND: OFF</button></div>
 <div id="gamebox">
 <canvas id="game" width="480" height="720" aria-label="DOPAUP game"></canvas>
 <div id="overlay"><div class="panel"><h1 id="ovtitle">DOPAUP<span style="color:#b8ff69">⇧</span></h1><p id="ovtext">キャラクターを選んで、上を目指そう！</p><div id="characterPicker" aria-label="キャラクター選択"><button class="charChoice" data-char="0"><canvas class="charPreview" width="30" height="38"></canvas><span class="charName">LIME RUNNER</span></button><button class="charChoice" data-char="1"><canvas class="charPreview" width="30" height="38"></canvas><span class="charName">PURPLE POP</span></button><button class="charChoice" data-char="2"><canvas class="charPreview" width="30" height="38"></canvas><span class="charName">CYBER BLUE</span></button></div><button id="start">START</button></div></div>
 </div>
-<div id="hint">TAP / <kbd>SPACE</kbd> / <kbd>↑</kbd>　JUMP TO CLIMB<br>壁で反転 ・ 足場から落下するとRUN終了</div><div class="footerline"><span>DOPAUP⇧ // PROTOTYPE 0.8.0</span><span>CLIMB YOUR LIMIT.</span></div>
+<div id="hint">TAP / <kbd>SPACE</kbd> / <kbd>↑</kbd>　JUMP TO CLIMB<br>壁で反転 ・ 足場から落下するとRUN終了</div><div class="footerline"><span>DOPAUP⇧ // PROTOTYPE 0.8.1</span><span>CLIMB YOUR LIMIT.</span></div>
 </div>
 <script>
 (()=>{
@@ -44,7 +44,7 @@ const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
 const W=480,H=720,LEFT=42,RIGHT=438,GRAVITY=.40,JUMP=-8.0,SPEED=3.15;
 const floorEl=document.getElementById('floor'),bestEl=document.getElementById('best'),comboEl=document.getElementById('combo'),soundBtn=document.getElementById('soundToggle'),overlay=document.getElementById('overlay'),startBtn=document.getElementById('start'),ovtitle=document.getElementById('ovtitle'),ovtext=document.getElementById('ovtext');
 let running=false,player,platforms,cameraY,floor,best,frame,lastTime,nextLevel,lastWallSide;
-let combo=0,particles=[],popups=[],soundMuted=true,audioCtx=null;
+let combo=0,particles=[],popups=[],soundMuted=true,audioCtx=null,screenFlash=0,shake=0;
 const characters=[{name:'LIME RUNNER',hair:'#26351b',skin:'#ffd2a1',top:'#d7ff35',trim:'#a855f7',pants:'#28334a'},{name:'PURPLE POP',hair:'#40205f',skin:'#f4bd9a',top:'#b64cff',trim:'#eaff35',pants:'#282044'},{name:'CYBER BLUE',hair:'#172d50',skin:'#e8c5a5',top:'#36e8ff',trim:'#ffffff',pants:'#1d3550'}];
 let selectedCharacter=0;try{selectedCharacter=Math.max(0,Math.min(2,Number(localStorage.getItem('dopaup_character'))||0));}catch(e){}
 try{soundMuted=localStorage.getItem('dopaup_muted')!=='false';}catch(e){}
@@ -57,7 +57,7 @@ function makeNextPlatform(previous){
  // 1階と10階ごとは両側に壁。5階ごとの壁なし区間は10階を除く。
  const bothWalls=level===1||level%10===0;
  const noWall=!bothWalls&&level%5===0;
- const w=noWall?260:200;
+ const w=noWall?260:Math.max(145,200-Math.floor(level/4)*5);
  // 直前だけでなく2階層前とも十分に重なる位置に限定し、壁の挟み込みを防ぐ。
  const recent=platforms.filter(p=>!p.base).slice(-2);
  const requiredOverlap=138;
@@ -72,11 +72,11 @@ function makeNextPlatform(previous){
  const x=minX<=maxX?rand(minX,maxX):Math.max(LEFT+10,Math.min(RIGHT-10-w,previous.x+(previous.w-w)/2));
  // 両壁・壁なし階は左右交互の順番に影響させず、片側壁だけ交互に切り替える。
  const wallSide=bothWalls?'both':noWall?null:(lastWallSide=lastWallSide==='left'?'right':'left');
- const rise=76;
+ const rise=72+Math.min(4,Math.floor(level/12));
  return {x,y:previous.y-rise-rand(0,3),w,h:14,base:false,level,wallSide,safe:noWall};
 }
 function reset(){
- floor=1;best=Math.max(1,best||1);cameraY=0;frame=0;nextLevel=2;lastWallSide='left';combo=0;particles=[];popups=[];comboEl.innerHTML='0<em>×</em>';
+ floor=1;best=Math.max(1,best||1);cameraY=0;frame=0;nextLevel=2;lastWallSide='left';combo=0;particles=[];popups=[];screenFlash=0;shake=0;comboEl.innerHTML='0<em>×</em>';
  player={x:110,y:590,vx:SPEED,vy:0,w:27,h:34,onGround:false,jumpBuffer:0,coyote:0,jumpsUsed:0};
  platforms=[{x:68,y:630,w:344,h:18,base:true,level:1,wallSide:'both'}];
  for(let i=0;i<14;i++)platforms.push(makeNextPlatform(platforms[platforms.length-1]));
@@ -156,8 +156,10 @@ function update(){
      combo++;comboEl.innerHTML=combo+'<em>×</em>';
      const playerCenter=player.x+player.w/2,platformCenter=p.x+p.w/2;
      const perfect=Math.abs(playerCenter-platformCenter)<=p.w*.18;
-     spawnBurst(playerCenter,p.y,perfect?'#eaff35':'#b64cff',perfect?24:12);
-     addPopup(playerCenter,p.y-18,perfect?'PERFECT!':'+'+combo+' COMBO',perfect?'#eaff35':'#ffffff');
+     screenFlash=Math.max(screenFlash,perfect?.42:.18);shake=Math.max(shake,perfect?9:4);
+     spawnBurst(playerCenter,p.y,perfect?'#eaff35':'#b64cff',perfect?42:22);
+     addPopup(playerCenter,p.y-18,perfect?'✦ PERFECT ✦':'+'+combo+' COMBO',perfect?'#eaff35':'#ffffff');
+     if(combo%5===0){screenFlash=.65;shake=12;spawnBurst(playerCenter,p.y,'#36e8ff',38);addPopup(playerCenter,p.y-65,'★ '+combo+' STREAK ★','#36e8ff');}
      playTone(perfect?880:620,perfect?.16:.07,perfect?'sawtooth':'triangle',perfect?.055:.035);
      if(perfect){addPopup(playerCenter,p.y-42,'NICE LANDING!','#36e8ff');playTone(1180,.12,'sine',.035);}
      if(combo>1)playTone(420+Math.min(combo,15)*35,.09,'square',.018);
@@ -169,7 +171,7 @@ function update(){
  if(player.jumpBuffer>0&&player.jumpsUsed<1){
   player.vy=JUMP;player.onGround=false;player.coyote=0;player.jumpsUsed++;player.jumpBuffer=0;
  }
- particles=particles.filter(a=>a.life>0);for(const a of particles){a.x+=a.vx;a.y+=a.vy;a.vy+=.08;a.life--;}
+ screenFlash=Math.max(0,screenFlash-.035);shake=Math.max(0,shake-.65);particles=particles.filter(a=>a.life>0);for(const a of particles){a.x+=a.vx;a.y+=a.vy;a.vy+=.08;a.life--;}
  popups=popups.filter(a=>a.life>0);for(const a of popups){a.y-=.7;a.life--;}
  const target=player.y-H*.48;if(target<cameraY)cameraY+=(target-cameraY)*.14;
  addPlatforms();if(player.y-cameraY>H+75)end();
@@ -177,6 +179,7 @@ function update(){
 function spawnBurst(x,y,color,count){const ox=x-(player.x+player.w/2),oy=y-player.y;for(let i=0;i<count;i++){const a=Math.random()*Math.PI*2,sp=1+Math.random()*3.5;particles.push({x:ox,y:oy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:42+Math.random()*16,max:58,color,size:2+Math.random()*3});}}
 function addPopup(x,y,text,color){popups.push({x:x-(player.x+player.w/2),y:y-player.y,text,color,life:66});}
 function draw(){
+ ctx.save();if(shake>0)ctx.translate(rand(-shake,shake),rand(-shake,shake));
  ctx.clearRect(0,0,W,H);
  const zone=Math.floor((floor-1)/10),zoneNames=['NEON CITY','SUNSET DISTRICT','CLOUD NINE','CYBER SPACE','GLITCH ZONE'],zoneColors=[['#17294a','#253b58','#101827'],['#592b59','#a94f68','#30213f'],['#397c9c','#a8d8e8','#244d70'],['#111536','#303d78','#090d25'],['#35134e','#762d88','#130d2c']];
  const palette=zoneColors[Math.min(zone,4)],sky=ctx.createLinearGradient(0,0,0,H);
@@ -215,6 +218,8 @@ function draw(){
  ctx.shadowBlur=0;ctx.globalAlpha=1;
  for(const a of popups){ctx.globalAlpha=Math.min(1,a.life/12);ctx.fillStyle=a.color;ctx.shadowColor=a.color;ctx.shadowBlur=14;ctx.font='1000 17px system-ui';ctx.textAlign='center';ctx.fillText(a.text,player.x+player.w/2+a.x,player.y+a.y);}
  ctx.shadowBlur=0;ctx.globalAlpha=1;ctx.textAlign='left';
+ ctx.restore();
+ if(screenFlash>0){ctx.fillStyle='#eaff35';ctx.globalAlpha=screenFlash*.22;ctx.fillRect(0,0,W,H);ctx.globalAlpha=1;}
  ctx.restore();
  ctx.fillStyle='#d7ff35';ctx.font='900 11px system-ui';ctx.fillText('↑  CLIMB HIGHER',18,27);
  ctx.fillStyle='#ffffff';ctx.font='1000 10px system-ui';ctx.textAlign='right';ctx.fillText('ZONE '+String(Math.min(zone+1,5)).padStart(2,'0')+' / '+zoneNames[Math.min(zone,4)],W-18,27);ctx.textAlign='left';
