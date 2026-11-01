@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#090b10">
-<title>DOPAUP⇧ Prototype 0.6.7</title>
+<title>DOPAUP⇧ Prototype 0.6.8</title>
 <style>
 :root{color-scheme:dark;--acid:#d7ff35;--violet:#a855f7;--ink:#090b10;--panel:#151922;--line:#303744}
 *{box-sizing:border-box}
@@ -29,18 +29,18 @@ button{border:0;border-radius:4px;background:var(--acid);color:#11150a;font-weig
 </head>
 <body>
 <div id="wrap">
-<header><div class="brand"><div class="brandmark">↑</div><div><div class="logo">DOPAUP<span>⇧</span></div><div class="subbrand">DOPAMINE SUPPLY / VERTICAL ARCADE</div></div></div><div class="pill">TEST BUILD 06.7</div></header>
-<div id="hud"><div class="stat"><small>CURRENT FLOOR</small><strong id="floor">0<em>F</em></strong></div><div class="stat"><small>RUN RECORD</small><strong id="best">0<em>F</em></strong></div></div>
+<header><div class="brand"><div class="brandmark">↑</div><div><div class="logo">DOPAUP<span>⇧</span></div><div class="subbrand">DOPAMINE SUPPLY / VERTICAL ARCADE</div></div></div><div class="pill">TEST BUILD 06.8</div></header>
+<div id="hud"><div class="stat"><small>CURRENT FLOOR</small><strong id="floor">1<em>F</em></strong></div><div class="stat"><small>RUN RECORD</small><strong id="best">1<em>F</em></strong></div></div>
 <div id="gamebox">
 <canvas id="game" width="480" height="720" aria-label="DOPAUP game"></canvas>
 <div id="overlay"><div class="panel"><h1 id="ovtitle">DOPAUP<span style="color:#b8ff69">⇧</span></h1><p id="ovtext">自動で左右に走るキャラクターを、ジャンプさせて上へ導こう。壁に当たると向きが変わる。</p><button id="start">START</button></div></div>
 </div>
-<div id="hint">TAP / <kbd>SPACE</kbd> / <kbd>↑</kbd>　JUMP TO CLIMB<br>壁で反転 ・ 足場から落下するとRUN終了</div><div class="footerline"><span>DOPAUP⇧ // PROTOTYPE 0.6.7</span><span>CLIMB YOUR LIMIT.</span></div>
+<div id="hint">TAP / <kbd>SPACE</kbd> / <kbd>↑</kbd>　JUMP TO CLIMB<br>壁で反転 ・ 足場から落下するとRUN終了</div><div class="footerline"><span>DOPAUP⇧ // PROTOTYPE 0.6.8</span><span>CLIMB YOUR LIMIT.</span></div>
 </div>
 <script>
 (()=>{
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
-const W=480,H=720,LEFT=42,RIGHT=438,GRAVITY=.40,JUMP=-11.2,SPEED=3.15;
+const W=480,H=720,LEFT=42,RIGHT=438,GRAVITY=.40,JUMP=-8.0,SPEED=3.15;
 const floorEl=document.getElementById('floor'),bestEl=document.getElementById('best'),overlay=document.getElementById('overlay'),startBtn=document.getElementById('start'),ovtitle=document.getElementById('ovtitle'),ovtext=document.getElementById('ovtext');
 let running=false,player,platforms,cameraY,floor,best,frame,lastTime,nextLevel,lastWallSide;
 const rand=(a,b)=>a+Math.random()*(b-a);
