@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#090b10">
-<title>DOPAUP⇧ Prototype 0.6.4</title>
+<title>DOPAUP⇧ Prototype 0.6.5</title>
 <style>
 :root{color-scheme:dark;--acid:#d7ff35;--violet:#a855f7;--ink:#090b10;--panel:#151922;--line:#303744}
 *{box-sizing:border-box}
@@ -29,13 +29,13 @@ button{border:0;border-radius:4px;background:var(--acid);color:#11150a;font-weig
 </head>
 <body>
 <div id="wrap">
-<header><div class="brand"><div class="brandmark">↑</div><div><div class="logo">DOPAUP<span>⇧</span></div><div class="subbrand">DOPAMINE SUPPLY / VERTICAL ARCADE</div></div></div><div class="pill">TEST BUILD 06.4</div></header>
+<header><div class="brand"><div class="brandmark">↑</div><div><div class="logo">DOPAUP<span>⇧</span></div><div class="subbrand">DOPAMINE SUPPLY / VERTICAL ARCADE</div></div></div><div class="pill">TEST BUILD 06.5</div></header>
 <div id="hud"><div class="stat"><small>CURRENT FLOOR</small><strong id="floor">0<em>F</em></strong></div><div class="stat"><small>RUN RECORD</small><strong id="best">0<em>F</em></strong></div></div>
 <div id="gamebox">
 <canvas id="game" width="480" height="720" aria-label="DOPAUP game"></canvas>
 <div id="overlay"><div class="panel"><h1 id="ovtitle">DOPAUP<span style="color:#b8ff69">⇧</span></h1><p id="ovtext">自動で左右に走るキャラクターを、ジャンプさせて上へ導こう。壁に当たると向きが変わる。</p><button id="start">START</button></div></div>
 </div>
-<div id="hint">TAP / <kbd>SPACE</kbd> / <kbd>↑</kbd>　JUMP TO CLIMB<br>壁で反転 ・ 足場から落下するとRUN終了</div><div class="footerline"><span>DOPAUP⇧ // PROTOTYPE 0.6.4</span><span>CLIMB YOUR LIMIT.</span></div>
+<div id="hint">TAP / <kbd>SPACE</kbd> / <kbd>↑</kbd>　JUMP TO CLIMB<br>壁で反転 ・ 足場から落下するとRUN終了</div><div class="footerline"><span>DOPAUP⇧ // PROTOTYPE 0.6.5</span><span>CLIMB YOUR LIMIT.</span></div>
 </div>
 <script>
 (()=>{
@@ -60,7 +60,7 @@ function makeNextPlatform(previous){
  return {x,y:previous.y-rise-rand(0,3),w,h:14,base:false,level,wallSide,safe};
 }
 function reset(){
- floor=0;best=0;cameraY=0;frame=0;nextLevel=1;lastWallSide='right';
+ floor=0;best=0;cameraY=0;frame=0;nextLevel=1;lastWallSide='left';
  player={x:110,y:590,vx:SPEED,vy:0,w:27,h:34,onGround:false,jumpBuffer:0,coyote:0,jumpsUsed:0};
  platforms=[{x:68,y:630,w:344,h:18,base:true,level:0}];
  for(let i=0;i<14;i++)platforms.push(makeNextPlatform(platforms[platforms.length-1]));
