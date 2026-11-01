@@ -151,7 +151,20 @@ function draw(){
  ctx.fillStyle='#d7ff35';ctx.font='900 11px system-ui';ctx.fillText('↑  CLIMB HIGHER',18,27);
  ctx.fillStyle='#ffffff';ctx.font='1000 10px system-ui';ctx.textAlign='right';ctx.fillText('ZONE '+String(Math.min(zone+1,5)).padStart(2,'0')+' / '+zoneNames[Math.min(zone,4)],W-18,27);ctx.textAlign='left';
 }
-function loop(t){if(!running)return;const dt=Math.min((t-lastTime)/16.67,2);lastTime=t;for(let i=0;i<Math.max(1,Math.round(dt));i++)update();draw();if(running)requestAnimationFrame(loop);}
+function loop(t){
+ if(!running)return;
+ requestAnimationFrame(loop);
+ try{
+  const dt=Math.min((t-lastTime)/16.67,2);lastTime=t;
+  for(let i=0;i<Math.max(1,Math.round(dt));i++)update();
+  draw();
+ }catch(err){
+  running=false;overlay.style.display='flex';ovtitle.textContent='GAME ERROR';
+  ovtext.textContent='処理エラー：'+(err&&err.message?err.message:String(err));
+  startBtn.textContent='RETRY';
+  console.error('DOPAUP runtime error:',err);
+ }
+}
 canvas.addEventListener('pointerdown',e=>{e.preventDefault();jump();});
 window.addEventListener('keydown',e=>{if(['Space','ArrowUp','KeyW'].includes(e.code)){e.preventDefault();if(!running)start();else jump();}});
 startBtn.addEventListener('click',start);reset();draw();
