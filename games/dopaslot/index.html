@@ -65,6 +65,13 @@ h1{margin:8px 0 2px;color:#ffe29a;font-size:clamp(38px,9vw,64px);letter-spacing:
 .reel.hit-flash{animation:hitFlash .38s ease-out}
 .reel.perfect{border-color:#fff;background:linear-gradient(110deg,#fff7ad,#fff,#ffc8f2);box-shadow:0 0 0 3px #fff,0 0 18px #ffe66d,0 0 35px #ff4fc8}
 .reel.perfect .symbol{text-shadow:0 0 12px #fff,0 0 20px #ec4899}
+.machine.triple-hit .reel{animation:tripleReelFlash .75s ease-in-out 3;border-color:#fff;background:linear-gradient(110deg,#fff5a8,#fff,#ffb8ed,#b9f5ff);box-shadow:0 0 0 4px #fff,0 0 22px #ffe66d,0 0 42px #ff4fc8,0 0 58px #38bdf8}
+.machine.triple-hit .reel .symbol{animation:tripleSymbolPop .55s ease-in-out infinite alternate;text-shadow:0 0 10px #fff,0 0 22px #ec4899,0 0 35px #38bdf8}
+.machine.triple-hit .reel-frame{animation:tripleFrameFlash .35s steps(2,end) 6}
+.machine.triple-hit .lights{animation-duration:.18s;filter:brightness(1.8)}
+@keyframes tripleReelFlash{0%,100%{filter:brightness(1);transform:scale(1)}50%{filter:brightness(2.2);transform:scale(1.045)}}
+@keyframes tripleSymbolPop{from{transform:scale(1)}to{transform:scale(1.22)}}
+@keyframes tripleFrameFlash{0%{box-shadow:0 0 16px #c084fc}100%{box-shadow:0 0 28px #fff,0 0 55px #ff4fc8,0 0 75px #38bdf8}}
 @keyframes hitFlash{0%{box-shadow:0 0 0 5px #fff,0 0 30px 14px #67e8f9;filter:brightness(2)}100%{box-shadow:inset 0 0 14px #59421c66,0 0 10px #fff,0 0 20px #c084fc;filter:brightness(1)}}
 .payline{text-align:center;color:#c8a05a;font:10px Arial,sans-serif;letter-spacing:.2em;margin:10px 0 0}
 .message{min-height:58px;display:grid;place-items:center;text-align:center;color:#ffdf91;font:700 clamp(15px,4vw,20px) Arial,sans-serif;letter-spacing:.06em;text-shadow:0 0 12px #e8a82c77;padding:12px 0}
@@ -169,6 +176,7 @@ function randomSymbol(){return symbols[Math.floor(Math.random()*symbols.length)]
 function update(){pointsEl.textContent=points.toLocaleString();bestEl.textContent=best.toLocaleString()}
 function payout(result){
  let gain=0,text="NO MATCH — TRY AGAIN!";
+ const isTriple=result.every(x=>x===result[0]);
  if(result.every(x=>x==="7")){gain=1000;text="★★★ JACKPOT! ★★★"}
  else if(result.every(x=>x==="BAR")){gain=500;text="BAR BAR BAR!"}
  else if(result.every(x=>x===result[0])){gain=300;text="PERFECT TRIPLE!"}
@@ -183,7 +191,13 @@ function payout(result){
  message.textContent=(gain?text+"  +"+gain+" POINTS":text)+(perfectBonus?"  · PERFECT +"+perfectBonus:"");
  message.classList.toggle("win",gain>0||perfectStops>0);
  if(gain>0||perfectStops>0)pachiFlash();
- if(gain>=500){document.getElementById("jackpotPoints").textContent="+"+gain+" POINTS";jackpot.classList.add("show");setTimeout(()=>jackpot.classList.remove("show"),1700)}
+ const machine=document.querySelector(".machine");
+ if(isTriple){
+   machine.classList.remove("triple-hit");void machine.offsetWidth;machine.classList.add("triple-hit");
+   document.getElementById("jackpotPoints").textContent=(result[0]==="7"?"777 JACKPOT":result[0]==="BAR"?"BAR BIG HIT":"TRIPLE HIT")+"  ·  +"+gain+" POINTS";
+   jackpot.classList.add("show");
+   setTimeout(()=>{jackpot.classList.remove("show");machine.classList.remove("triple-hit")},2300);
+ } else if(gain>=500){document.getElementById("jackpotPoints").textContent="+"+gain+" POINTS";jackpot.classList.add("show");setTimeout(()=>jackpot.classList.remove("show"),1700)}
 }
 function finishIfReady(){
  if(!stopped.every(Boolean))return;
