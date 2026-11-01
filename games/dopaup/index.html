@@ -82,12 +82,41 @@ function reset(){
  for(let i=0;i<14;i++)platforms.push(makeNextPlatform(platforms[platforms.length-1]));
  floorEl.textContent='1';bestEl.textContent='1';
 }
-function drawCharacter(target,x,y,type,anim=0){const ch=characters[type]||characters[0],u=3;target.save();target.translate(Math.round(x),Math.round(y));target.imageSmoothingEnabled=false;const px=(a,b,w,h,color)=>{target.fillStyle=color;target.fillRect(a*u,b*u,w*u,h*u);};
- // 9x11 pixel-art chibi runner: hair, face, hoodie, hands and sneakers
- px(2,0,5,2,ch.hair);px(1,1,2,2,ch.hair);px(6,1,2,2,ch.hair);px(2,2,5,3,ch.skin);px(1,2,1,2,ch.hair);px(7,2,1,2,ch.hair);
- px(3,3,1,1,'#242033');px(6,3,1,1,'#242033');px(4,4,2,1,'#ffffff');px(2,5,5,1,ch.top);px(1,6,7,3,ch.top);px(0,6,2,2,ch.skin);px(7,6,2,2,ch.skin);px(3,6,3,1,ch.trim);px(2,9,2,1,ch.pants);px(5,9,2,1,ch.pants);px(1,10,3,1,ch.trim);px(5,10,3,1,ch.trim);
- // subtle alternating foot pixels
- if(Math.floor(anim/8)%2){px(1,10,3,1,ch.pants);px(5,10,3,1,ch.trim);}target.restore();}
+function drawCharacter(target,x,y,type,anim=0){
+ const ch=characters[type]||characters[0],u=3;
+ target.save();target.translate(Math.round(x),Math.round(y));target.imageSmoothingEnabled=false;
+ const px=(a,b,w,h,color)=>{target.fillStyle=color;target.fillRect(a*u,b*u,w*u,h*u);};
+ const step=Math.floor(anim/7)%2;
+ if(type===0){
+  // LIME RUNNER: spiky hair, visor headband, sporty hoodie and high-top shoes
+  px(2,0,5,1,'#28351d');px(1,1,7,2,'#28351d');px(0,1,2,2,'#28351d');px(2,2,5,3,ch.skin);
+  px(1,2,1,2,'#28351d');px(7,2,1,2,'#28351d');px(2,2,5,1,'#28351d');
+  px(2,3,5,1,'#eaff35');px(3,4,1,1,'#202033');px(6,4,1,1,'#202033');px(4,5,2,1,'#9b594c');
+  px(2,6,5,1,ch.top);px(1,7,7,2,ch.top);px(0,7,2,2,ch.skin);px(7,7,2,2,ch.skin);
+  px(3,7,3,2,'#b7ff72');px(2,9,2,1,'#27334b');px(5,9,2,1,'#27334b');
+  px(1,10,3,1,'#eaff35');px(5,10,3,1,'#eaff35');
+  if(step){px(1,10,3,1,'#27334b');px(5,10,3,1,'#eaff35');}
+ }else if(type===1){
+  // PURPLE POP: long twin-tail hair, side fringe, oversized jacket and skirt/leggings
+  px(1,0,7,2,'#54206f');px(0,1,2,6,'#54206f');px(7,1,2,6,'#54206f');
+  px(2,1,5,4,ch.skin);px(2,1,5,1,'#54206f');px(1,3,2,3,'#54206f');
+  px(3,3,1,1,'#292039');px(6,3,1,1,'#292039');px(4,4,2,1,'#ffffff');
+  px(2,5,5,1,'#f3a6ff');px(1,6,7,3,ch.top);px(0,6,2,3,'#54206f');px(7,6,2,3,'#54206f');
+  px(3,6,3,2,'#f3a6ff');px(2,9,2,1,'#282044');px(5,9,2,1,'#282044');
+  px(1,10,3,1,'#ffb6f3');px(5,10,3,1,'#ffb6f3');
+  if(step){px(1,9,2,1,'#ffb6f3');px(5,10,3,1,'#282044');}
+ }else{
+  // CYBER BLUE: hard-shell robot helmet, antenna, glowing visor, armored suit and boots
+  px(4,0,1,1,'#ffffff');px(4,1,1,1,ch.trim);px(2,2,5,1,'#1c4262');px(1,3,7,3,'#1c4262');
+  px(2,3,5,2,ch.top);px(0,3,2,3,'#1c4262');px(7,3,2,3,'#1c4262');
+  px(3,4,1,1,'#10243d');px(6,4,1,1,'#10243d');px(4,5,2,1,'#ffffff');
+  px(2,6,5,1,'#1c4262');px(1,7,7,2,'#287fa0');px(0,7,2,2,'#36e8ff');px(7,7,2,2,'#36e8ff');
+  px(3,7,3,2,'#d9fbff');px(2,9,2,1,'#183451');px(5,9,2,1,'#183451');
+  px(1,10,3,1,'#36e8ff');px(5,10,3,1,'#36e8ff');
+  if(step){px(1,10,3,1,'#183451');px(5,10,3,1,'#36e8ff');}
+ }
+ target.restore();
+}
 function renderCharacterPicker(){document.querySelectorAll('.charChoice').forEach((button,index)=>{button.classList.toggle('active',index===selectedCharacter);const c=button.querySelector('canvas').getContext('2d');c.clearRect(0,0,30,38);drawCharacter(c,1,2,index,frame||0);});}
 function jump(){if(running&&player.jumpsUsed<1){player.jumpBuffer=10;playTone(520,.055,'triangle',.025);}}
 function start(){reset();running=true;overlay.style.display='none';lastTime=performance.now();requestAnimationFrame(loop);}
